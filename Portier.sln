@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portier.Authorization", "src\Portier.Authorization\Portier.Authorization.csproj", "{22BDA82F-CA9B-411C-8269-7138F9C407EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portier.Authentication.Tests", "test\Portier.Authentication.Tests\Portier.Authentication.Tests.csproj", "{001B7029-3B43-4234-A8C1-1433F5D47DE6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portier.Authorization.Tests", "test\Portier.Authorization.Tests\Portier.Authorization.Tests.csproj", "{001B7029-3B43-4234-A8C1-1433F5D47DE6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

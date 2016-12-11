@@ -6,8 +6,8 @@
     <ProjectGuid>{001B7029-3B43-4234-A8C1-1433F5D47DE6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Portier.Authentication.Tests</RootNamespace>
-    <AssemblyName>Portier.Authentication.Tests</AssemblyName>
+    <RootNamespace>Portier.Authorization.Tests</RootNamespace>
+    <AssemblyName>Portier.Authorization.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -54,6 +54,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Portier.Authorization\Portier.Authorization.csproj">
+      <Project>{22bda82f-ca9b-411c-8269-7138f9c407ef}</Project>
+      <Name>Portier.Authorization</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

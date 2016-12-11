@@ -4,7 +4,7 @@
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Portier.Authentication.Tests
+namespace Portier.Authorization.Tests
 {
     [TestClass]
     public class AuthorizationTests
