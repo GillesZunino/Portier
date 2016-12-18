@@ -37,7 +37,12 @@
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IAuthorization.cs" />
+    <Compile Include="AuthorizationDecision.cs" />
+    <Compile Include="IAuthorizationEngine.cs" />
+    <Compile Include="IRoleAssignment.cs" />
+    <Compile Include="IRoleAssignmentProvider.cs" />
+    <Compile Include="IRoleDefinition.cs" />
+    <Compile Include="IRoleDefinitionProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
