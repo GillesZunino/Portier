@@ -3,35 +3,34 @@
 // -----------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
 
 namespace Portier.Authorization
 {
     /// <summary>
-    /// Compares an RBAC action to an RBAC pattern for wildcard match.
+    /// Checks wether an RBAC action matches an RBAC pattern.
     /// </summary>
-    public class ActionComparer : IEqualityComparer<string>
+    public static class PermissionPatternMatcher
     {
         private const string Wildcard = "*";
         private static readonly char[] ActionDelimiters = new char[] { '/' };
 
         /// <summary>
-        /// Determines wether an RBAC action matches an RBACC pattern.
+        /// Determines wether an RBAC action matches an RBAC pattern.
         /// </summary>
-        /// <param name="x">RBAC pattern.</param>
-        /// <param name="y">RBAC action to check against the pattern.</param>
+        /// <param name="pattern">RBAC pattern.</param>
+        /// <param name="action">RBAC action to check against the pattern.</param>
         /// <returns>true if the specified objects are equal; otherwise, false.</returns>
-        public bool Equals(string x, string y)
+        public static bool IsMatch(string pattern, string action)
         {
             // Make null or emtpy pattern / action never match - We do not want a null or empty string to ever be understood as "authorization granted"
-            if (string.IsNullOrEmpty(x) || string.IsNullOrEmpty(y))
+            if (string.IsNullOrEmpty(pattern) || string.IsNullOrEmpty(action))
             {
                 return false;
             }
 
             // Split both the action pattern (Microsoft.Compute/virtualMachine/*/read) and the action (Microsoft.Compute/virtualMachine/myLittleVm/read) on the delimiter ("/")
-            string[] patternComponents = x.Split(ActionComparer.ActionDelimiters, StringSplitOptions.RemoveEmptyEntries);
-            string[] actionComponents = y.Split(ActionComparer.ActionDelimiters, StringSplitOptions.RemoveEmptyEntries);
+            string[] patternComponents = pattern.Split(ActionDelimiters, StringSplitOptions.RemoveEmptyEntries);
+            string[] actionComponents = action.Split(ActionDelimiters, StringSplitOptions.RemoveEmptyEntries);
 
             int patternSegmentIndex = 0;
             int actionSegmentIndex = 0;
@@ -123,21 +122,6 @@ namespace Portier.Authorization
                     return true;
                 }
             }
-        }
-
-        /// <summary>
-        /// Returns a hash code for the specified object.
-        /// </summary>
-        /// <param name="obj">Object for which a hash code is to be returned.</param>
-        /// <returns>Hash code for the specified object.</returns>
-        public int GetHashCode(string obj)
-        {
-            if (obj == null)
-            {
-                throw new ArgumentNullException(nameof(obj));
-            }
-
-            return obj.GetHashCode();
         }
     }
 }

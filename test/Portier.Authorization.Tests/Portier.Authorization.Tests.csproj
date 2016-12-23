@@ -53,7 +53,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="AuthorizationTests.cs" />
-    <Compile Include="ActionComparerTests.cs" />
+    <Compile Include="PermissionPatternMatcherTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
