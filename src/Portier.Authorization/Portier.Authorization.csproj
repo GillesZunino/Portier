@@ -43,6 +43,7 @@
     <Compile Include="IRoleAssignment.cs" />
     <Compile Include="IRoleAssignmentProvider.cs" />
     <Compile Include="IRoleDefinition.cs" />
+    <Compile Include="ScopePrefixMatcher.cs" />
     <Compile Include="IRoleDefinitionProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
