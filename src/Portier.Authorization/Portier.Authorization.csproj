@@ -37,6 +37,7 @@
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ActionComparer.cs" />
     <Compile Include="AuthorizationDecision.cs" />
     <Compile Include="IAuthorizationEngine.cs" />
     <Compile Include="IRoleAssignment.cs" />
