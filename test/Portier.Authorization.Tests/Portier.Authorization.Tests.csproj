@@ -53,6 +53,8 @@
   </Choose>
   <ItemGroup>
     <Compile Include="AuthorizationTests.cs" />
+    <Compile Include="Common\AssertExtensions.cs" />
+    <Compile Include="ScopePrefixMatcherTests.cs" />
     <Compile Include="PermissionPatternMatcherTests.cs" />
   </ItemGroup>
   <ItemGroup>
