@@ -3,51 +3,51 @@
 // -----------------------------------------------------------------------------------
 
 using System;
+using System.Globalization;
+using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace Portier.Authorization
 {
     /// <summary>
-    /// Checks wether an RBAC action matches an RBAC pattern.
+    /// Checks wether an RBAC permission matches an RBAC permission pattern.
     /// </summary>
     public static class PermissionPatternMatcher
     {
         private const string Wildcard = "*";
-        private static readonly char[] ActionDelimiters = new char[] { '/' };
+        private static readonly char[] PermissionDelimiters = new char[] { '/' };
 
         /// <summary>
-        /// Determines wether an RBAC action matches an RBAC pattern.
+        /// Determines wether an RBAC permission matches an RBAC pattern.
         /// </summary>
         /// <param name="pattern">RBAC pattern.</param>
-        /// <param name="action">RBAC action to check against the pattern.</param>
-        /// <returns>true if the specified objects are equal; otherwise, false.</returns>
-        public static bool IsMatch(string pattern, string action)
+        /// <param name="permission">RBAC permission to check against the pattern.</param>
+        /// <returns>true if the specified permission matches the pattern; otherwise, false.</returns>
+        public static bool IsMatch(string pattern, string permission)
         {
-            // Make null or emtpy pattern / action never match - We do not want a null or empty string to ever be understood as "authorization granted"
-            if (string.IsNullOrEmpty(pattern) || string.IsNullOrEmpty(action))
-            {
-                return false;
-            }
+            EnsureValidPermissionPattern(pattern, nameof(pattern));
+            EnsureValidPermission(permission, nameof(permission));
 
-            // Split both the action pattern (Microsoft.Compute/virtualMachine/*/read) and the action (Microsoft.Compute/virtualMachine/myLittleVm/read) on the delimiter ("/")
-            string[] patternComponents = pattern.Split(ActionDelimiters, StringSplitOptions.RemoveEmptyEntries);
-            string[] actionComponents = action.Split(ActionDelimiters, StringSplitOptions.RemoveEmptyEntries);
+            // Split both the permission pattern (Microsoft.Compute/virtualMachine/*/read) and the permission (Microsoft.Compute/virtualMachine/myLittleVm/read) on the delimiter ("/")
+            string[] patternComponents = pattern.Split(PermissionDelimiters, StringSplitOptions.RemoveEmptyEntries);
+            string[] permissionComponents = permission.Split(PermissionDelimiters, StringSplitOptions.RemoveEmptyEntries);
 
             int patternSegmentIndex = 0;
-            int actionSegmentIndex = 0;
+            int permissionSegmentIndex = 0;
 
             int patternRestartPointIndex = -1;
 
             while (true)
             {
-                // Traverse action components one by one trying to match them to the corresponding pattern components
-                while (actionSegmentIndex < actionComponents.Length)
+                // Traverse permission components one by one trying to match them to the corresponding pattern components
+                while (permissionSegmentIndex < permissionComponents.Length)
                 {
-                    // Action component matches pattern component exactly ? (aka in the example above "Microsoft.Compute" and "Microsoft.Compute" or "read" and "read")
-                    if ((patternSegmentIndex < patternComponents.Length) && (string.Compare(patternComponents[patternSegmentIndex], actionComponents[actionSegmentIndex], StringComparison.OrdinalIgnoreCase) == 0))
+                    // Permission component matches pattern component exactly ? (aka in the example above "Microsoft.Compute" and "Microsoft.Compute" or "read" and "read")
+                    if ((patternSegmentIndex < patternComponents.Length) && (string.Compare(patternComponents[patternSegmentIndex], permissionComponents[permissionSegmentIndex], StringComparison.OrdinalIgnoreCase) == 0))
                     {
-                        // Move to next action and pattern components
+                        // Move to next permission and pattern components
                         patternSegmentIndex++;
-                        actionSegmentIndex++;
+                        permissionSegmentIndex++;
                     }
                     else
                     {
@@ -58,10 +58,10 @@ namespace Portier.Authorization
 
                             // We have encountered a wildcard - The next segment becomes a possible restart point in the pattern
                             //
-                            // Consider the following situation for which we would like the action to match the pattern:
+                            // Consider the following situation for which we would like the permission to match the pattern:
                             //
-                            //   pattern: A/*/B/C/D
-                            //   action : A/s/B/C/XXX/B/C/D
+                            //   pattern    : A/*/B/C/D
+                            //   permission : A/s/B/C/XXX/B/C/D
                             //                ^       ^
                             //  There are two possible starts for pattern /B/C/D marked with ^ above
                             //  The first one is a false start (/B/C/XXX). The second one ends up being a match (/B/C/D)
@@ -79,24 +79,24 @@ namespace Portier.Authorization
                                 // Did we consume the pattern entirely ?
                                 if (patternSegmentIndex < patternComponents.Length)
                                 {
-                                    // Move to the next pattern segment if the pattern at the restart point matches the action segment
-                                    if (string.Compare(patternComponents[patternSegmentIndex], actionComponents[actionSegmentIndex], StringComparison.OrdinalIgnoreCase) == 0)
+                                    // Move to the next pattern segment if the pattern at the restart point matches the permission segment
+                                    if (string.Compare(patternComponents[patternSegmentIndex], permissionComponents[permissionSegmentIndex], StringComparison.OrdinalIgnoreCase) == 0)
                                     {
                                         patternSegmentIndex++;
                                     }
 
-                                    // Move to the next segment in the action
-                                    actionSegmentIndex++;
+                                    // Move to the next segment in the permission
+                                    permissionSegmentIndex++;
                                 }
                                 else
                                 {
-                                    // Pattern consumed entirely - Action matches the pattern
+                                    // Pattern consumed entirely - Permission matches the pattern
                                     return true;
                                 }
                             }
                             else
                             {
-                                // No restart is possible - Action does not match pattern
+                                // No restart is possible - Permission does not match pattern
                                 return false;
                             }
                         }
@@ -106,7 +106,7 @@ namespace Portier.Authorization
                 // Did we consume the pattern entirely ?
                 if (patternSegmentIndex < patternComponents.Length)
                 {
-                    // Pattern has not yet been scanned entirely yet we consumed the entire action - For a match, the next segment of the pattern must be one or more wildcards
+                    // Pattern has not yet been scanned entirely yet we consumed the entire permission - For a match, the next segment of the pattern must be one or more wildcards
                     if (StringComparer.Ordinal.Equals(Wildcard, patternComponents[patternSegmentIndex]))
                     {
                         patternSegmentIndex++;
@@ -121,6 +121,41 @@ namespace Portier.Authorization
                     // The pattern has been entirely scanned - We have found a match
                     return true;
                 }
+            }
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static void EnsureValidPermissionPattern(string pattern, string argumentName)
+        {
+            if (string.IsNullOrEmpty(pattern))
+            {
+                throw new ArgumentOutOfRangeException(argumentName, "Permission pattern must not be null or empty");
+            }
+
+            // Pattern must not start with one of the component delimiter we know
+            if (PermissionDelimiters.Any((c) => c == pattern[0]))
+            {
+                throw new ArgumentOutOfRangeException(argumentName, string.Format(CultureInfo.CurrentCulture, "Permission pattern '{0}' must not start with a delimiter (one of '{1}')", pattern, string.Join(", ", PermissionDelimiters)));
+            }
+        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static void EnsureValidPermission(string permission, string argumentName)
+        {
+            if (string.IsNullOrEmpty(permission))
+            {
+                throw new ArgumentOutOfRangeException(argumentName, "Permission must not be null or empty");
+            }
+
+            // Permission must not contain wildcards
+            if (permission.Contains(Wildcard))
+            {
+                throw new ArgumentOutOfRangeException(argumentName, string.Format(CultureInfo.CurrentCulture, "Permission cannot contain wildcards - '{0}'", permission));
+            }
+
+            // Permission must not start with one of the component delimiter we know
+            if (PermissionDelimiters.Any((c) => c == permission[0]))
+            {
+                throw new ArgumentOutOfRangeException(argumentName, string.Format(CultureInfo.CurrentCulture, "Permission '{0}' must not start with a delimiter (one of '{1}')", permission, string.Join(", ", PermissionDelimiters)));
             }
         }
     }

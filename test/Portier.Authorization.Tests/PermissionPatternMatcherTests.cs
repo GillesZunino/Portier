@@ -2,7 +2,9 @@
 // Copyright 2016, Gilles Zunino
 // -----------------------------------------------------------------------------------
 
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Portier.Authorization.Tests.Common;
 
 namespace Portier.Authorization.Tests
 {
@@ -10,39 +12,88 @@ namespace Portier.Authorization.Tests
     public class PermissionPatternMatcherTests
     {
         [TestMethod]
+        public void Permission_Cannot_Contain_Wildcards()
+        {
+            AssertExtensions.ShouldThrow(
+                () => { PermissionPatternMatcher.IsMatch("*", "Microsoft.Compute/*/read"); },
+                (exception) => { return exception.GetType() == typeof(ArgumentOutOfRangeException); }
+            );
+        }
+
+        [TestMethod]
+        public void Pattern_Cannot_Start_With_Delimiter()
+        {
+            AssertExtensions.ShouldThrow(
+                () => { PermissionPatternMatcher.IsMatch("/*", "Microsoft.Compute/virtualMachines/start/action"); },
+                (exception) => { return exception.GetType() == typeof(ArgumentOutOfRangeException); }
+            );
+
+            AssertExtensions.ShouldThrow(
+                () => { PermissionPatternMatcher.IsMatch("/", "Microsoft.Compute/virtualMachines/start/action"); },
+                (exception) => { return exception.GetType() == typeof(ArgumentOutOfRangeException); }
+            );
+
+            AssertExtensions.ShouldThrow(
+                () => { PermissionPatternMatcher.IsMatch("/////", "Microsoft.Compute/virtualMachines/start/action"); },
+                (exception) => { return exception.GetType() == typeof(ArgumentOutOfRangeException); }
+            );
+        }
+
+        [TestMethod]
+        public void Permission_Cannot_Start_With_Delimiter()
+        {
+            AssertExtensions.ShouldThrow(
+                () => { PermissionPatternMatcher.IsMatch("/////", "/"); },
+                (exception) => { return exception.GetType() == typeof(ArgumentOutOfRangeException); }
+            );
+
+            AssertExtensions.ShouldThrow(
+                () => { PermissionPatternMatcher.IsMatch("/////", "////"); },
+                (exception) => { return exception.GetType() == typeof(ArgumentOutOfRangeException); }
+            );
+        }
+
+        [TestMethod]
+        public void Trailing_Delimiter_Are_Ignored()
+        {
+            string pattern = "Microsoft.Compute/Foo";
+            string permission = "Microsoft.Compute/Foo/";
+            bool isEqual = PermissionPatternMatcher.IsMatch(pattern, permission);
+            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, permission);
+
+            pattern = "Microsoft.Compute/Foo//";
+            permission = "Microsoft.Compute/Foo///";
+            isEqual = PermissionPatternMatcher.IsMatch(pattern, permission);
+            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, permission);
+
+            pattern = "a//";
+            permission = "a";
+            isEqual = PermissionPatternMatcher.IsMatch(pattern, permission);
+            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, permission);
+
+            pattern = "a//";
+            permission = "a/";
+            isEqual = PermissionPatternMatcher.IsMatch(pattern, permission);
+            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, permission);
+
+            pattern = "a//";
+            permission = "a//////";
+            isEqual = PermissionPatternMatcher.IsMatch(pattern, permission);
+            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, permission);
+        }
+
+        [TestMethod]
         public void Wildcard_Pattern_Matches_Anything()
         {
             string pattern = "*";
 
-            string action = "Microsoft.Compute/virtualMachines/start/action";
-            bool isEqual = PermissionPatternMatcher.IsMatch(pattern, action);
-            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, action);
+            string permission = "Microsoft.Compute/virtualMachines/start/action";
+            bool isEqual = PermissionPatternMatcher.IsMatch(pattern, permission);
+            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, permission);
 
-            action = "Microsoft.Compute/*/read";
-            isEqual = PermissionPatternMatcher.IsMatch(pattern, action);
-            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, action);
-
-            action = "Microsoft.Insights/alertRules/*";
-            isEqual = PermissionPatternMatcher.IsMatch(pattern, action);
-            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, action);
-        }
-
-        [TestMethod]
-        public void SlashWildcard_Pattern_Matches_Anything()
-        {
-            string pattern = "/*";
-
-            string action = "Microsoft.Compute/virtualMachines/start/action";
-            bool isEqual = PermissionPatternMatcher.IsMatch(pattern, action);
-            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, action);
-
-            action = "Microsoft.Compute/*/read";
-            isEqual = PermissionPatternMatcher.IsMatch(pattern, action);
-            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, action);
-
-            action = "Microsoft.Insights/alertRules/*";
-            isEqual = PermissionPatternMatcher.IsMatch(pattern, action);
-            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, action);
+            permission = "Microsoft.Compute/start";
+            isEqual = PermissionPatternMatcher.IsMatch(pattern, permission);
+            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, permission);
         }
 
         [TestMethod]
@@ -50,187 +101,184 @@ namespace Portier.Authorization.Tests
         {
             string pattern = "Microsoft.Compute/*/*/start/action";
 
-            string action = "Microsoft.Compute/virtualMachines/start/action";
-            bool isEqual = PermissionPatternMatcher.IsMatch(pattern, action);
-            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, action);
+            string permission = "Microsoft.Compute/virtualMachines/start/action";
+            bool isEqual = PermissionPatternMatcher.IsMatch(pattern, permission);
+            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, permission);
 
-            action = "Microsoft.Compute/*/start/action";
-            isEqual = PermissionPatternMatcher.IsMatch(pattern, action);
-            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, action);
+            permission = "Microsoft.Compute/start/action";
+            isEqual = PermissionPatternMatcher.IsMatch(pattern, permission);
+            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, permission);
 
-            action = "Microsoft.Compute/alertRules/foo/bar/froggle/start/action";
-            isEqual = PermissionPatternMatcher.IsMatch(pattern, action);
-            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, action);
+            permission = "Microsoft.Compute/alertRules/foo/bar/froggle/start/action";
+            isEqual = PermissionPatternMatcher.IsMatch(pattern, permission);
+            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, permission);
         }
 
         [TestMethod]
         public void Wildcard_Matches_No_Segment()
         {
             string pattern = "Microsoft.Compute/*";
-            string action = "Microsoft.Compute";
-            bool isEqual = PermissionPatternMatcher.IsMatch(pattern, action);
-            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, action);
+            string permission = "Microsoft.Compute";
+            bool isEqual = PermissionPatternMatcher.IsMatch(pattern, permission);
+            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, permission);
 
             pattern = "Microsoft.Compute/*";
-            action = "Microsoft.Compute/foo";
-            isEqual = PermissionPatternMatcher.IsMatch(pattern, action);
-            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, action);
+            permission = "Microsoft.Compute/foo";
+            isEqual = PermissionPatternMatcher.IsMatch(pattern, permission);
+            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, permission);
 
             pattern = "Microsoft.Compute/*/start";
-            action = "Microsoft.Compute/start";
-            isEqual = PermissionPatternMatcher.IsMatch(pattern, action);
-            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, action);
+            permission = "Microsoft.Compute/start";
+            isEqual = PermissionPatternMatcher.IsMatch(pattern, permission);
+            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, permission);
 
             pattern = "Microsoft.Compute/*/permissions/*/start";
-            action = "Microsoft.Compute/permissions/start";
-            isEqual = PermissionPatternMatcher.IsMatch(pattern, action);
-            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, action);
+            permission = "Microsoft.Compute/permissions/start";
+            isEqual = PermissionPatternMatcher.IsMatch(pattern, permission);
+            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, permission);
 
             pattern = "Microsoft.Compute/*/permissions/*";
-            action = "Microsoft.Compute/permissions";
-            isEqual = PermissionPatternMatcher.IsMatch(pattern, action);
-            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, action);
+            permission = "Microsoft.Compute/permissions";
+            isEqual = PermissionPatternMatcher.IsMatch(pattern, permission);
+            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, permission);
         }
 
         [TestMethod]
         public void Wildcard_Matches_Several_Consecutive_Segments()
         {
             string pattern = "A/*/B/C/D";
-            string action = "A/s/Z/C/XXX/B/C/D";
-            bool isEqual = PermissionPatternMatcher.IsMatch(pattern, action);
-            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, action);
+            string permission = "A/s/Z/C/XXX/B/C/D";
+            bool isEqual = PermissionPatternMatcher.IsMatch(pattern, permission);
+            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, permission);
         }
 
         [TestMethod]
         public void Wildcard_At_End_Matches_Several_Segments()
         {
             string pattern = "Microsoft.Compute/*";
-            string action = "Microsoft.Compute/foo/bar";
-            bool isEqual = PermissionPatternMatcher.IsMatch(pattern, action);
-            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, action);
+            string permission = "Microsoft.Compute/foo/bar";
+            bool isEqual = PermissionPatternMatcher.IsMatch(pattern, permission);
+            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, permission);
 
             pattern = "Microsoft.Compute/*";
-            action = "Microsoft.Compute/foo/bar/frog";
-            isEqual = PermissionPatternMatcher.IsMatch(pattern, action);
-            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, action);
+            permission = "Microsoft.Compute/foo/bar/frog";
+            isEqual = PermissionPatternMatcher.IsMatch(pattern, permission);
+            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, permission);
         }
 
         [TestMethod]
         public void Non_Wildcard_Pattern_Matches_Exactly()
         {
             string pattern = "Microsoft.Compute/alertRules/foo/bar/froggle/start/action";
-            string action = "Microsoft.Compute/alertRules/foo/bar/froggle/start/action";
-            bool isEqual = PermissionPatternMatcher.IsMatch(pattern, action);
-            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, action);
+            string permission = "Microsoft.Compute/alertRules/foo/bar/froggle/start/action";
+            bool isEqual = PermissionPatternMatcher.IsMatch(pattern, permission);
+            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, permission);
 
             pattern = "Microsoft.Compute";
-            action = "Microsoft.Compute";
-            isEqual = PermissionPatternMatcher.IsMatch(pattern, action);
-            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, action);
+            permission = "Microsoft.Compute";
+            isEqual = PermissionPatternMatcher.IsMatch(pattern, permission);
+            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, permission);
 
             pattern = "Microsoft.Compute/virtualMachines/start";
-            action = "Microsoft.Compute/start";
-            isEqual = PermissionPatternMatcher.IsMatch(pattern, action);
-            Assert.IsFalse(isEqual, "'{0}' does not match '{1}'", pattern, action);
+            permission = "Microsoft.Compute/start";
+            isEqual = PermissionPatternMatcher.IsMatch(pattern, permission);
+            Assert.IsFalse(isEqual, "'{0}' does not match '{1}'", pattern, permission);
         }
 
         [TestMethod]
         public void Comparisons_Are_OrdinalIgnoreCase()
         {
             string pattern = "Microsoft.Compute/ALERTRULES/foo/BaR/froggle/StarT/acTioN";
-            string action = "Microsoft.CoMpuTe/alertRules/foo/bar/froGGle/stArt/Action";
-            bool isEqual = PermissionPatternMatcher.IsMatch(pattern, action);
-            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, action);
+            string permission = "Microsoft.CoMpuTe/alertRules/foo/bar/froGGle/stArt/Action";
+            bool isEqual = PermissionPatternMatcher.IsMatch(pattern, permission);
+            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, permission);
 
             pattern = "Microsoft.Compute";
-            action = "MICROSOFT.cOMpuTe";
-            isEqual = PermissionPatternMatcher.IsMatch(pattern, action);
-            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, action);
+            permission = "MICROSOFT.cOMpuTe";
+            isEqual = PermissionPatternMatcher.IsMatch(pattern, permission);
+            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, permission);
         }
 
         [TestMethod]
         public void Wildcard_Match_Can_Restart_On_False_Start()
         {
             string pattern = "A/*/B";
-            string action = "A/s/B/C/XXX/B";
-            bool isEqual = PermissionPatternMatcher.IsMatch(pattern, action);
-            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, action);
+            string permission = "A/s/B/C/XXX/B";
+            bool isEqual = PermissionPatternMatcher.IsMatch(pattern, permission);
+            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, permission);
 
             pattern = "A/*/B";
-            action = "A/s/B/B";
-            isEqual = PermissionPatternMatcher.IsMatch(pattern, action);
-            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, action);
+            permission = "A/s/B/B";
+            isEqual = PermissionPatternMatcher.IsMatch(pattern, permission);
+            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, permission);
 
             pattern = "A/*/B";
-            action = "A/B/B/B";
-            isEqual = PermissionPatternMatcher.IsMatch(pattern, action);
-            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, action);
+            permission = "A/B/B/B";
+            isEqual = PermissionPatternMatcher.IsMatch(pattern, permission);
+            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, permission);
 
             pattern = "A/*/B/C/D";
-            action = "A/s/B/C/XXX/B/C/D";
-            isEqual = PermissionPatternMatcher.IsMatch(pattern, action);
-            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, action);
+            permission = "A/s/B/C/XXX/B/C/D";
+            isEqual = PermissionPatternMatcher.IsMatch(pattern, permission);
+            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, permission);
         }
 
         [TestMethod]
-        public void Pattern_Longer_Than_Action_Matches_Only_If_Ends_With_Wildcard()
+        public void Pattern_Longer_Than_Permission_Matches_Only_If_Ends_With_Wildcard()
         {
             string pattern = "A/*/B/D";
-            string action = "A/B";
-            bool isEqual = PermissionPatternMatcher.IsMatch(pattern, action);
-            Assert.IsFalse(isEqual, "'{0}' does not match '{1}'", pattern, action);
+            string permission = "A/B";
+            bool isEqual = PermissionPatternMatcher.IsMatch(pattern, permission);
+            Assert.IsFalse(isEqual, "'{0}' does not match '{1}'", pattern, permission);
 
             pattern = "A/*/B/*";
-            action = "A/B";
-            isEqual = PermissionPatternMatcher.IsMatch(pattern, action);
-            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, action);
+            permission = "A/B";
+            isEqual = PermissionPatternMatcher.IsMatch(pattern, permission);
+            Assert.IsTrue(isEqual, "'{0}' matches '{1}'", pattern, permission);
         }
 
         [TestMethod]
-        public void Null_Or_Empty_Action_Or_Pattern_Never_Matches()
+        public void Pattern_And_Permission_Must_Not_Be_Null_Or_Empty()
         {
-            // Pattern null
-            string pattern = null;
-            string action = null;
-            bool isEqual = PermissionPatternMatcher.IsMatch(pattern, action);
-            Assert.IsFalse(isEqual, "'{0}' does not match '{1}'", pattern, action);
+            AssertExtensions.ShouldThrow(
+                () => { PermissionPatternMatcher.IsMatch(null, null); },
+                (exception) => { return exception.GetType() == typeof(ArgumentOutOfRangeException); }
+            );
 
-            pattern = null;
-            action = string.Empty;
-            isEqual = PermissionPatternMatcher.IsMatch(pattern, action);
-            Assert.IsFalse(isEqual, "'{0}' does not match '{1}'", pattern, action);
+            AssertExtensions.ShouldThrow(
+                () => { PermissionPatternMatcher.IsMatch(null, string.Empty); },
+                (exception) => { return exception.GetType() == typeof(ArgumentOutOfRangeException); }
+            );
 
-            pattern = null;
-            action = "A/B";
-            isEqual = PermissionPatternMatcher.IsMatch(pattern, action);
-            Assert.IsFalse(isEqual, "'{0}' does not match '{1}'", pattern, action);
+            AssertExtensions.ShouldThrow(
+                () => { PermissionPatternMatcher.IsMatch(null, "A/B"); },
+                (exception) => { return exception.GetType() == typeof(ArgumentOutOfRangeException); }
+            );
 
-            // Pattern string.Empty
-            pattern = string.Empty;
-            action = null;
-            isEqual = PermissionPatternMatcher.IsMatch(pattern, action);
-            Assert.IsFalse(isEqual, "'{0}' does not match '{1}'", pattern, action);
+            AssertExtensions.ShouldThrow(
+                () => { PermissionPatternMatcher.IsMatch(string.Empty, null); },
+                (exception) => { return exception.GetType() == typeof(ArgumentOutOfRangeException); }
+            );
 
-            pattern = string.Empty;
-            action = string.Empty;
-            isEqual = PermissionPatternMatcher.IsMatch(pattern, action);
-            Assert.IsFalse(isEqual, "'{0}' does not match '{1}'", pattern, action);
+            AssertExtensions.ShouldThrow(
+                () => { PermissionPatternMatcher.IsMatch(string.Empty, string.Empty); },
+                (exception) => { return exception.GetType() == typeof(ArgumentOutOfRangeException); }
+            );
 
-            pattern = string.Empty;
-            action = "A/B";
-            isEqual = PermissionPatternMatcher.IsMatch(pattern, action);
-            Assert.IsFalse(isEqual, "'{0}' does not match '{1}'", pattern, action);
+            AssertExtensions.ShouldThrow(
+                () => { PermissionPatternMatcher.IsMatch(string.Empty, "A/B"); },
+                (exception) => { return exception.GetType() == typeof(ArgumentOutOfRangeException); }
+            );
 
-            // Pattern "A/B"
-            pattern = "A/B";
-            action = null;
-            isEqual = PermissionPatternMatcher.IsMatch(pattern, action);
-            Assert.IsFalse(isEqual, "'{0}' does not match '{1}'", pattern, action);
+            AssertExtensions.ShouldThrow(
+                () => { PermissionPatternMatcher.IsMatch("A/B", null); },
+                (exception) => { return exception.GetType() == typeof(ArgumentOutOfRangeException); }
+            );
 
-            pattern = "A/B";
-            action = string.Empty;
-            isEqual = PermissionPatternMatcher.IsMatch(pattern, action);
-            Assert.IsFalse(isEqual, "'{0}' does not match '{1}'", pattern, action);
+            AssertExtensions.ShouldThrow(
+                () => { PermissionPatternMatcher.IsMatch("A/B", string.Empty); },
+                (exception) => { return exception.GetType() == typeof(ArgumentOutOfRangeException); }
+            );
         }
     }
 }
