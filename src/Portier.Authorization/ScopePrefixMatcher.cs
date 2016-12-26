@@ -23,11 +23,11 @@ namespace Portier.Authorization
         /// <param name="parent">Parent scope.</param>
         /// <param name="child">Child scope.</param>
         /// <returns>true if the child scope matches the parent; otherwise, false.</returns>
-        /// <remarks>All scopes must start with a vaid scope delimiter (aka be rooted) or <see cref="ArgumentOutOfRangeException"/> is thrown.</remarks>
+        /// <remarks>All scopes must start with a valid scope delimiter (aka be rooted) or <see cref="ArgumentOutOfRangeException"/> is thrown.</remarks>
         public static bool IsPrefixMatch(string parent, string child)
         {
-            EnsureScopeRooted(parent, nameof(parent));
-            EnsureScopeRooted(child, nameof(child));
+            ValidateScope(parent, nameof(parent));
+            ValidateScope(child, nameof(child));
 
             return ScopeComponentsPrefixMatchChild(GetScopeComponents(parent), GetScopeComponents(child));
         }
@@ -38,14 +38,35 @@ namespace Portier.Authorization
         /// <param name="parents">One or more parent scopes.</param>
         /// <param name="child">Child scope.</param>
         /// <returns>true if the child scope matches at least one parent; otherwise, false.</returns>
-        /// <remarks>All scopes must start with a vaid scope delimiter (aka be rooted) or <see cref="ArgumentOutOfRangeException"/> is thrown.</remarks>
+        /// <remarks>All scopes must start with a valid scope delimiter (aka be rooted) or <see cref="ArgumentOutOfRangeException"/> is thrown.</remarks>
         public static bool IsPrefixMatch(IEnumerable<string> parents, string child)
         {
-            EnsureParentsRooted(parents, nameof(parents));
-            EnsureScopeRooted(child, nameof(child));
+            ValidateParentScopes(parents, nameof(parents));
+            ValidateScope(child, nameof(child));
 
             string[] childComponents = GetScopeComponents(child);
             return parents.Any(parent => ScopeComponentsPrefixMatchChild(GetScopeComponents(parent), childComponents));
+        }
+
+        /// <summary>
+        /// Validates a scope. Errors are reported via exceptions.
+        /// </summary>
+        /// <param name="scope">Scope to validate.</param>
+        /// <param name="argumentName">Name of argument in case of failure.</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void ValidateScope(string scope, string argumentName)
+        {
+            // Scope must not  be null or empty
+            if (string.IsNullOrEmpty(scope))
+            {
+                throw new ArgumentOutOfRangeException(argumentName, "Scope must not be null or empty");
+            }
+
+            // Scope must be rooted (start with one of the component delimiter we know)
+            if (ScopeComponentDelimiters.Any((c) => c != scope[0]))
+            {
+                throw new ArgumentOutOfRangeException(argumentName, string.Format(CultureInfo.CurrentCulture, "Scope '{0}' must start with a delimiter (one of '{1}')", scope, string.Join(", ", ScopeComponentDelimiters)));
+            }
         }
 
         private static bool ScopeComponentsPrefixMatchChild(string[] scopeComponents, string[] childComponents)
@@ -78,7 +99,7 @@ namespace Portier.Authorization
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static void EnsureParentsRooted(IEnumerable<string> parents, string argumentName)
+        private static void ValidateParentScopes(IEnumerable<string> parents, string argumentName)
         {
             if (parents == null)
             {
@@ -89,29 +110,13 @@ namespace Portier.Authorization
 
             foreach (string parent in parents)
             {
-                EnsureScopeRooted(parent, argumentName);
+                ValidateScope(parent, argumentName);
                 hasParents = true;
             }
 
             if (!hasParents)
             {
                 throw new ArgumentOutOfRangeException(argumentName, "At least one parent scope must be provided");
-            }
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static void EnsureScopeRooted(string scope, string argumentName)
-        {
-            // Scope must not  be null or empty
-            if (string.IsNullOrEmpty(scope))
-            {
-                throw new ArgumentOutOfRangeException(argumentName, "Scope must not be null or empty");
-            }
-
-            // Scope must be rooted (start with one of the component delimiter we know)
-            if (ScopeComponentDelimiters.Any((c) => c != scope[0]))
-            {
-                throw new ArgumentOutOfRangeException(argumentName, string.Format(CultureInfo.CurrentCulture, "Scope '{0}' must start with a delimiter (one of '{1}')", scope, string.Join(", ", ScopeComponentDelimiters)));
             }
         }
     }
