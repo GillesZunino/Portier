@@ -55,6 +55,10 @@
     <Compile Include="AuthorizationTests.cs" />
     <Compile Include="Common\AssertExtensions.cs" />
     <Compile Include="ScopePrefixMatcherTests.cs" />
+    <Compile Include="Engine\TestRoleAssigmentProvider.cs" />
+    <Compile Include="Engine\TestRoleAssignment.cs" />
+    <Compile Include="Engine\TestRoleDefinition.cs" />
+    <Compile Include="Engine\TestRoleDefinitionProvider.cs" />
     <Compile Include="PermissionPatternMatcherTests.cs" />
   </ItemGroup>
   <ItemGroup>
