@@ -25,8 +25,8 @@ namespace Portier.Authorization
         /// <returns>true if the specified permission matches the pattern; otherwise, false.</returns>
         public static bool IsMatch(string pattern, string permission)
         {
-            EnsureValidPermissionPattern(pattern, nameof(pattern));
-            EnsureValidPermission(permission, nameof(permission));
+            ValidatePermissionPattern(pattern, nameof(pattern));
+            ValidatePermission(permission, nameof(permission));
 
             // Split both the permission pattern (Microsoft.Compute/virtualMachine/*/read) and the permission (Microsoft.Compute/virtualMachine/myLittleVm/read) on the delimiter ("/")
             string[] patternComponents = pattern.Split(PermissionDelimiters, StringSplitOptions.RemoveEmptyEntries);
@@ -124,22 +124,13 @@ namespace Portier.Authorization
             }
         }
 
+        /// <summary>
+        /// Validates a permission. Errors are reported via exceptions.
+        /// </summary>
+        /// <param name="permission">Permission to validate.</param>
+        /// <param name="argumentName">Name of argument in case of failure.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static void EnsureValidPermissionPattern(string pattern, string argumentName)
-        {
-            if (string.IsNullOrEmpty(pattern))
-            {
-                throw new ArgumentOutOfRangeException(argumentName, "Permission pattern must not be null or empty");
-            }
-
-            // Pattern must not start with one of the component delimiter we know
-            if (PermissionDelimiters.Any((c) => c == pattern[0]))
-            {
-                throw new ArgumentOutOfRangeException(argumentName, string.Format(CultureInfo.CurrentCulture, "Permission pattern '{0}' must not start with a delimiter (one of '{1}')", pattern, string.Join(", ", PermissionDelimiters)));
-            }
-        }
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static void EnsureValidPermission(string permission, string argumentName)
+        public static void ValidatePermission(string permission, string argumentName)
         {
             if (string.IsNullOrEmpty(permission))
             {
@@ -156,6 +147,21 @@ namespace Portier.Authorization
             if (PermissionDelimiters.Any((c) => c == permission[0]))
             {
                 throw new ArgumentOutOfRangeException(argumentName, string.Format(CultureInfo.CurrentCulture, "Permission '{0}' must not start with a delimiter (one of '{1}')", permission, string.Join(", ", PermissionDelimiters)));
+            }
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        private static void ValidatePermissionPattern(string pattern, string argumentName)
+        {
+            if (string.IsNullOrEmpty(pattern))
+            {
+                throw new ArgumentOutOfRangeException(argumentName, "Permission pattern must not be null or empty");
+            }
+
+            // Pattern must not start with one of the component delimiter we know
+            if (PermissionDelimiters.Any((c) => c == pattern[0]))
+            {
+                throw new ArgumentOutOfRangeException(argumentName, string.Format(CultureInfo.CurrentCulture, "Permission pattern '{0}' must not start with a delimiter (one of '{1}')", pattern, string.Join(", ", PermissionDelimiters)));
             }
         }
     }
