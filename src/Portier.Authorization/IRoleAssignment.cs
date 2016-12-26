@@ -2,8 +2,6 @@
 // Copyright 2016, Gilles Zunino
 // -----------------------------------------------------------------------------------
 
-using System.Security.Claims;
-
 namespace Portier.Authorization
 {
     /// <summary>
@@ -25,12 +23,5 @@ namespace Portier.Authorization
         /// Gets the scope the role is assigned at.
         /// </summary>
         string Scope { get; }
-
-        /// <summary>
-        /// Determines wether the role assignment is made for the given identity.
-        /// </summary>
-        /// <param name="claimsIdentity"></param>
-        /// <returns>true if the role is assigned to the given identity, false otherwise.</returns>
-        bool AppliesToPrincipal(ClaimsIdentity claimsIdentity);
     }
 }

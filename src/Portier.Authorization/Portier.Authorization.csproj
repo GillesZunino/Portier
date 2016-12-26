@@ -37,6 +37,7 @@
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AuthorizationCheckCallback.cs" />
     <Compile Include="PermissionPatternMatcher.cs" />
     <Compile Include="AuthorizationDecision.cs" />
     <Compile Include="IAuthorizationEngine.cs" />
