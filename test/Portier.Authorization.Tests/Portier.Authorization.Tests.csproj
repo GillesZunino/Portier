@@ -52,8 +52,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="AuthorizationTests.cs" />
     <Compile Include="Common\AssertExtensions.cs" />
+    <Compile Include="Engine\AuthorizationEngineTests.cs" />
     <Compile Include="ScopePrefixMatcherTests.cs" />
     <Compile Include="Engine\TestRoleAssigmentProvider.cs" />
     <Compile Include="Engine\TestRoleAssignment.cs" />
