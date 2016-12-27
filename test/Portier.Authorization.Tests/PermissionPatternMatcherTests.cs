@@ -51,6 +51,11 @@ namespace Portier.Authorization.Tests
                 () => { PermissionPatternMatcher.IsMatch("/////", "////"); },
                 (exception) => { return exception.GetType() == typeof(ArgumentOutOfRangeException); }
             );
+
+            AssertExtensions.ShouldThrow(
+                () => { PermissionPatternMatcher.IsMatch("Bubble/burst", "/xxx"); },
+                (exception) => { return exception.GetType() == typeof(ArgumentOutOfRangeException); }
+            );
         }
 
         [TestMethod]
