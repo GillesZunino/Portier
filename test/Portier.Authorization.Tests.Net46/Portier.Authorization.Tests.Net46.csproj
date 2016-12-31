@@ -52,21 +52,22 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Common\AssertExtensions.cs" />
-    <Compile Include="Engine\AuthorizationEngineTests.cs" />
-    <Compile Include="MemoryRoleDefinitionProvider\UnvalidatedRoleDefinition.cs" />
-    <Compile Include="ScopePrefixMatcherTests.cs" />
-    <Compile Include="Engine\TestRoleAssigmentProvider.cs" />
-    <Compile Include="Engine\TestRoleAssignment.cs" />
-    <Compile Include="PermissionPatternMatcherTests.cs" />
-    <Compile Include="MemoryRoleDefinitionProvider\MemoryRoleDefinitionProviderTests.cs" />
-    <Compile Include="SimpleRoleDefinitionTests.cs" />
+    <Compile Include="..\Portier.Authorization.Tests\*.cs" />
+    <Compile Include="..\Portier.Authorization.Tests\Common\*.cs">
+        <Link>Common\Common</Link>
+    </Compile>
+    <Compile Include="..\Portier.Authorization.Tests\Engine\*.cs">
+        <Link>Engine\Engine</Link>
+    </Compile>
+    <Compile Include="..\Portier.Authorization.Tests\MemoryRoleDefinitionProvider\*.cs">
+        <Link>MemoryRoleDefinitionProvider\MemoryRoleDefinitionProvider</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Portier.Authorization\Portier.Authorization.csproj">
+    <ProjectReference Include="..\..\src\Portier.Authorization.NET46\Portier.Authorization.Net46.csproj">
       <Project>{22bda82f-ca9b-411c-8269-7138f9c407ef}</Project>
       <Name>Portier.Authorization</Name>
     </ProjectReference>

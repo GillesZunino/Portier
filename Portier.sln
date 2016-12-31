@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portier.Authorization", "src\Portier.Authorization\Portier.Authorization.csproj", "{22BDA82F-CA9B-411C-8269-7138F9C407EF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portier.Authorization.Net46", "src\Portier.Authorization.NET46\Portier.Authorization.Net46.csproj", "{22BDA82F-CA9B-411C-8269-7138F9C407EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portier.Authorization.Tests", "test\Portier.Authorization.Tests\Portier.Authorization.Tests.csproj", "{001B7029-3B43-4234-A8C1-1433F5D47DE6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portier.Authorization.Tests.Net46", "test\Portier.Authorization.Tests.Net46\Portier.Authorization.Tests.Net46.csproj", "{001B7029-3B43-4234-A8C1-1433F5D47DE6}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Portier.Authorization.NetStandard", "src\Portier.Authorization.NetStandard\Portier.Authorization.NetStandard.xproj", "{4025CCEA-AC5A-42F7-B4FF-B82536683EB2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{001B7029-3B43-4234-A8C1-1433F5D47DE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{001B7029-3B43-4234-A8C1-1433F5D47DE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{001B7029-3B43-4234-A8C1-1433F5D47DE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4025CCEA-AC5A-42F7-B4FF-B82536683EB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4025CCEA-AC5A-42F7-B4FF-B82536683EB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4025CCEA-AC5A-42F7-B4FF-B82536683EB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4025CCEA-AC5A-42F7-B4FF-B82536683EB2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
