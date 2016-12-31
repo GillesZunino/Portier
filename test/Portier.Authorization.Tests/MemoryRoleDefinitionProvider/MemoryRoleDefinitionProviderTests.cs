@@ -23,9 +23,9 @@ namespace Portier.Authorization.Tests
         [TestMethod]
         public void Lookup_KnownRole_Definition_Returns_Item()
         {
-            List<SimpleRoleDefinition> oneRoleDefinition = new List<SimpleRoleDefinition>()
+            List<RoleDefinition> oneRoleDefinition = new List<RoleDefinition>()
             {
-                new SimpleRoleDefinition(
+                new RoleDefinition(
                     id : "abcd",
                     displayName : "A role without Id",
                     assignableScopes : new string[] { "/Company" },
@@ -68,9 +68,9 @@ namespace Portier.Authorization.Tests
         [TestMethod]
         public void Duplicate_RoleDefinition_Id_Throws_On_Ctor()
         {
-            List<SimpleRoleDefinition> duplicatedRoleDefinitions = new List<SimpleRoleDefinition>()
+            List<RoleDefinition> duplicatedRoleDefinitions = new List<RoleDefinition>()
             {
-                new SimpleRoleDefinition(
+                new RoleDefinition(
                     id : "abcd",
                     displayName : "A role definition",
                     assignableScopes : new string[] { "/Company" },
@@ -81,7 +81,7 @@ namespace Portier.Authorization.Tests
                     }
                 ),
 
-                new SimpleRoleDefinition(
+                new RoleDefinition(
                     id : "abcd",
                     displayName : "Another role definition",
                     assignableScopes : new string[] { "/BubbleMachine" },

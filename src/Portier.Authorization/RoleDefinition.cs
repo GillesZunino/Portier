@@ -9,7 +9,7 @@ namespace Portier.Authorization
     /// <summary>
     /// A simple role definition.
     /// </summary>
-    public class SimpleRoleDefinition : IRoleDefinition
+    public class RoleDefinition : IRoleDefinition
     {
         /// <summary>
         /// Gets or sets the globally unique identifier of the role definition.
@@ -38,7 +38,7 @@ namespace Portier.Authorization
         /// <param name="displayName">Display name.</param>
         /// <param name="assignableScopes">List of scopes this role definition can be assigned at.</param>
         /// <param name="permissions">List of permissions this role definition grants.</param>
-        public SimpleRoleDefinition(string id, string displayName, IEnumerable<string> assignableScopes, IEnumerable<string> permissions)
+        public RoleDefinition(string id, string displayName, IEnumerable<string> assignableScopes, IEnumerable<string> permissions)
         {
             Validators.ValidateRoleDefinitionComponents(id, assignableScopes, permissions);
           

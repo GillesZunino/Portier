@@ -16,7 +16,7 @@ namespace Portier.Authorization.Tests
         {
             AssertExtensions.ShouldThrow(
                 () => {
-                    new SimpleRoleDefinition(
+                    new RoleDefinition(
                         id: "",
                         displayName: "A role without Id",
                         assignableScopes: new string[] { "/Company" },
@@ -37,7 +37,7 @@ namespace Portier.Authorization.Tests
             // Missing scopes
             AssertExtensions.ShouldThrow(
                 () => {
-                    new SimpleRoleDefinition(
+                    new RoleDefinition(
                         id: "abcd",
                         displayName: "A role definition",
                         assignableScopes: null,
@@ -53,7 +53,7 @@ namespace Portier.Authorization.Tests
 
             AssertExtensions.ShouldThrow(
                 () => {
-                    new SimpleRoleDefinition(
+                    new RoleDefinition(
                         id: "abcd",
                         displayName: "A role definition",
                         assignableScopes: new string[] { },
@@ -70,7 +70,7 @@ namespace Portier.Authorization.Tests
             // Invalid scopes
             AssertExtensions.ShouldThrow(
                 () => {
-                    new SimpleRoleDefinition(
+                    new RoleDefinition(
                         id: "abcd",
                         displayName: "A role definition",
                         assignableScopes: new string[] { "BubbleMachine" },
@@ -89,7 +89,7 @@ namespace Portier.Authorization.Tests
             // Missing permissions
             AssertExtensions.ShouldThrow(
                 () => {
-                    new SimpleRoleDefinition(
+                    new RoleDefinition(
                         id: "abcd",
                         displayName: "A role definition",
                         assignableScopes: new string[] { "/BubbleMachine" },
@@ -101,7 +101,7 @@ namespace Portier.Authorization.Tests
 
             AssertExtensions.ShouldThrow(
                 () => {
-                    new SimpleRoleDefinition(
+                    new RoleDefinition(
                         id: "abcd",
                         displayName: "A role definition",
                         assignableScopes: new string[] { "/BubbleMachine" },
@@ -116,7 +116,7 @@ namespace Portier.Authorization.Tests
             // Invalid permissions
             AssertExtensions.ShouldThrow(
                 () => {
-                    new SimpleRoleDefinition(
+                    new RoleDefinition(
                         id: "abcd",
                         displayName: "A role definition",
                         assignableScopes: new string[] { "/BubbleMachine" },
