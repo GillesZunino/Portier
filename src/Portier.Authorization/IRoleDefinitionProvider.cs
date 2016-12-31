@@ -14,7 +14,7 @@ namespace Portier.Authorization
         /// </summary>
         /// <param name="roleDefinitionId">Globally unique identifier.</param>
         /// <returns>Role definition if found, null otherwise.</returns>
-        /// <remarks>Comparisions against id must be done using StringComparison.OrdinalIgnoreCase.</remarks>
+        /// <remarks>Comparisons against id must be done using StringComparison.OrdinalIgnoreCase.</remarks>
         IRoleDefinition GetRoleDefinitionById(string id);
     }
 }

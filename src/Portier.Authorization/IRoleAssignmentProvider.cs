@@ -15,7 +15,7 @@ namespace Portier.Authorization
         /// <summary>
         /// Gets a list of role assignment for a given user.
         /// </summary>
-        /// <param name="claimsIdentity">User to retrieve role assignments for, represented as a<see cref="ClaimsIdentity"/>.</param>
+        /// <param name="claimsIdentity">User to retrieve role assignments for, represented as a <see cref="ClaimsIdentity"/>.</param>
         /// <returns>Collection of role assignments for this user.</returns>
         IEnumerable<IRoleAssignment> GetRoleAssignmentsByClaimsIdentity(ClaimsIdentity claimsIdentity);
     }
