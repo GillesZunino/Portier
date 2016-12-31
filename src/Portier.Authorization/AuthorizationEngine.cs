@@ -5,7 +5,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Security.Claims;
 
 namespace Portier.Authorization
@@ -129,9 +128,14 @@ namespace Portier.Authorization
                                     // Perform a final check now that we have a possible authorization granted
                                     if (authorizationCheck(claimsIdentity, roleAssignment, roleDefinition))
                                     {
-                                        // User is allowed to perform this action - We only allocate the matching list of role assignments when the permissionis granted
-                                        AddAuthorizedRoleAssignment(roleAssignment, ref authorizedRoleAssignments);
+                                        // User is allowed to perform this action - We only allocate the list of matching role assignments only the permission is granted
+                                        if (authorizedRoleAssignments == null)
+                                        {
+                                            authorizedRoleAssignments = new List<IRoleAssignment>();
+                                        }
+                                        authorizedRoleAssignments.Add(roleAssignment);
 
+                                        // Stop on first match if we have been asked to
                                         if (stopOnPermissionGranted)
                                         {
                                             break;
@@ -146,19 +150,6 @@ namespace Portier.Authorization
 
             // Format result of the authorization check
             return authorizedRoleAssignments != null ? new AuthorizationDecision(true, authorizedRoleAssignments) : AccessDeniedAuthorizationDecision; 
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static void AddAuthorizedRoleAssignment(IRoleAssignment roleAssignment, ref List<IRoleAssignment> matchingRoleAssignments)
-        {
-            if (matchingRoleAssignments == null)
-            {
-                matchingRoleAssignments = new List<IRoleAssignment>() { roleAssignment };
-            }
-            else
-            {
-                matchingRoleAssignments.Add(roleAssignment);
-            }
         }
     }
 }
