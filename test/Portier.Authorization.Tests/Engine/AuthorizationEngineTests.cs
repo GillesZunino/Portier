@@ -20,28 +20,26 @@ namespace Portier.Authorization.Tests.Engine
         /// <summary>
         /// Role definitions for our test cases.
         /// </summary>
-        private static readonly List<TestRoleDefinition> TestRoleDefinitions = new List<TestRoleDefinition>()
+        private static readonly List<SimpleRoleDefinition> TestRoleDefinitions = new List<SimpleRoleDefinition>()
         {
-            new TestRoleDefinition()
-            {
-                Id = "31D55E52-735F-49DD-A47B-E885D71FCFBE",
-                DisplayName = "Director",
-                AssignableScopes = new string[] { "/Daycare" },
-                Permissions = new string[] {
+            new SimpleRoleDefinition(
+                id : "31D55E52-735F-49DD-A47B-E885D71FCFBE",
+                displayName : "Director",
+                assignableScopes : new string[] { "/Daycare" },
+                permissions : new string[] {
                     "Teach/*",
                     "Hire/*",
                     "Purchase/*",
                     "Bubble/*",
                     "BubbleMachine/*"
                 }
-            },
+            ),
 
-            new TestRoleDefinition()
-            {
-                Id = "8ABDDD31-4519-4175-9034-0A5E30BD3359",
-                DisplayName = "Bubble Master",
-                AssignableScopes = new string[] { "/Playground", "/Daycare" },
-                Permissions = new string[] {
+            new SimpleRoleDefinition(
+                id : "8ABDDD31-4519-4175-9034-0A5E30BD3359",
+                displayName : "Bubble Master",
+                assignableScopes : new string[] { "/Playground", "/Daycare" },
+                permissions : new string[] {
                     "Bubble/view",
                     "Bubble/burst",
                     "BubbleMachine/on",
@@ -49,18 +47,17 @@ namespace Portier.Authorization.Tests.Engine
                     "BubbleMachine/refill",
                     "BubbleMachine/move",
                 }
-            },
+            ),
 
-            new TestRoleDefinition()
-            {
-                Id = "FF49EF47-3E9B-4C22-8D35-61C982D980EF",
-                DisplayName = "Child",
-                AssignableScopes = new string[] { "/Playground", "/Daycare" },
-                Permissions = new string[] {
+            new SimpleRoleDefinition(
+                id : "FF49EF47-3E9B-4C22-8D35-61C982D980EF",
+                displayName : "Child",
+                assignableScopes : new string[] { "/Playground", "/Daycare" },
+                permissions : new string[] {
                     "Bubble/view",
                     "Bubble/burst"
                 }
-            }
+            )
         };
 
         /// <summary>
@@ -73,7 +70,7 @@ namespace Portier.Authorization.Tests.Engine
             new TestRoleAssignment()
             {
                 Id = "7EB9A7B6-6136-4F3E-8051-61A5CDDF33FC",
-                RoleDefinitionId = TestRoleDefinitions.Cast<TestRoleDefinition>().Single<TestRoleDefinition>((roleDefinition) => roleDefinition.DisplayName == "Director").Id,
+                RoleDefinitionId = TestRoleDefinitions.Cast<SimpleRoleDefinition>().Single<SimpleRoleDefinition>((roleDefinition) => roleDefinition.DisplayName == "Director").Id,
                 PrincipalId = "94eee687-978a-434d-bd7f-dd479b3971e6",
                 Scope = "/DayCare/AppleTree"
             },
@@ -83,7 +80,7 @@ namespace Portier.Authorization.Tests.Engine
             new TestRoleAssignment()
             {
                 Id = "C96691BD-A804-4B14-9DAC-4A433161029D",
-                RoleDefinitionId = TestRoleDefinitions.Cast<TestRoleDefinition>().Single<TestRoleDefinition>((roleDefinition) => roleDefinition.DisplayName == "Bubble Master").Id,
+                RoleDefinitionId = TestRoleDefinitions.Cast<SimpleRoleDefinition>().Single<SimpleRoleDefinition>((roleDefinition) => roleDefinition.DisplayName == "Bubble Master").Id,
                 PrincipalId = "94eee687-978a-434d-bd7f-dd479b3971e6",
                 Scope = "/Daycare/LittleBee"
             },
@@ -93,7 +90,7 @@ namespace Portier.Authorization.Tests.Engine
             new TestRoleAssignment()
             {
                 Id = "C8AD4774-74C7-4495-B366-03E6D37D11DF",
-                RoleDefinitionId = TestRoleDefinitions.Cast<TestRoleDefinition>().Single<TestRoleDefinition>((roleDefinition) => roleDefinition.DisplayName == "Child").Id,
+                RoleDefinitionId = TestRoleDefinitions.Cast<SimpleRoleDefinition>().Single<SimpleRoleDefinition>((roleDefinition) => roleDefinition.DisplayName == "Child").Id,
                 PrincipalId = "94eee687-978a-434d-bd7f-dd479b3971e6",
                 Scope = "/Daycare/LittleBee"
             }
@@ -240,14 +237,14 @@ namespace Portier.Authorization.Tests.Engine
             string permission = "Bubble/burst";
 
             // Use the final check callback to deny access to any child
-            AuthorizationDecision decision = authorizationEngine.CheckAccess(userClaimsIdentity, scope, permission, (claimsIdentity, roleAssignment, roleDefinition) => ((TestRoleDefinition)roleDefinition).DisplayName != "Child", true);
+            AuthorizationDecision decision = authorizationEngine.CheckAccess(userClaimsIdentity, scope, permission, (claimsIdentity, roleAssignment, roleDefinition) => ((SimpleRoleDefinition)roleDefinition).DisplayName != "Child", true);
 
             Assert.IsTrue(decision.IsAccessGranted, "User has permissions {0} on scope {1}", permission, scope);
             Assert.IsTrue(decision.SelectedRoleAssignments.Count == 1, "There is one role assignment matching");
             Assert.IsTrue(decision.SelectedRoleAssignments[0].Id == "C96691BD-A804-4B14-9DAC-4A433161029D", "User is assigned role 'Bubble Master'");
         }
 
-        private static AuthorizationEngine GetAuthorizationEngine(List<TestRoleDefinition> roleDefinitions, List<TestRoleAssignment> roleAssignments)
+        private static AuthorizationEngine GetAuthorizationEngine(List<SimpleRoleDefinition> roleDefinitions, List<TestRoleAssignment> roleAssignments)
         {
             TestRoleAssigmentProvider testRoleAssignementProvider = new TestRoleAssigmentProvider(
                 roleAssignments,
@@ -263,8 +260,8 @@ namespace Portier.Authorization.Tests.Engine
                     return false;
                 });
 
-            TestRoleDefinitionProvider testRoleDefinitionProvider = new TestRoleDefinitionProvider(roleDefinitions);
-            return new AuthorizationEngine(testRoleAssignementProvider, testRoleDefinitionProvider);
+            MemoryRoleDefinitionProvider SimpleRoleDefinitionProvider = new MemoryRoleDefinitionProvider(roleDefinitions);
+            return new AuthorizationEngine(testRoleAssignementProvider, SimpleRoleDefinitionProvider);
         }
 
         private static ClaimsIdentity GetClaimsIdentity()

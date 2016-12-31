@@ -54,12 +54,13 @@
   <ItemGroup>
     <Compile Include="Common\AssertExtensions.cs" />
     <Compile Include="Engine\AuthorizationEngineTests.cs" />
+    <Compile Include="MemoryRoleDefinitionProvider\UnvalidatedRoleDefinition.cs" />
     <Compile Include="ScopePrefixMatcherTests.cs" />
     <Compile Include="Engine\TestRoleAssigmentProvider.cs" />
     <Compile Include="Engine\TestRoleAssignment.cs" />
-    <Compile Include="Engine\TestRoleDefinition.cs" />
-    <Compile Include="Engine\TestRoleDefinitionProvider.cs" />
     <Compile Include="PermissionPatternMatcherTests.cs" />
+    <Compile Include="MemoryRoleDefinitionProvider\MemoryRoleDefinitionProviderTests.cs" />
+    <Compile Include="SimpleRoleDefinitionTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

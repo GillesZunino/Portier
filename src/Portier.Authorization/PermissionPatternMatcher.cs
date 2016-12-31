@@ -150,8 +150,13 @@ namespace Portier.Authorization
             }
         }
 
+        /// <summary>
+        /// Validates a permission pattern. Errors are reported via exceptions.
+        /// </summary>
+        /// <param name="pattern">Permission pattern to validate.</param>
+        /// <param name="argumentName">Name of argument in case of failure.</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private static void ValidatePermissionPattern(string pattern, string argumentName)
+        public static void ValidatePermissionPattern(string pattern, string argumentName)
         {
             if (string.IsNullOrEmpty(pattern))
             {

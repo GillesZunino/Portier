@@ -45,9 +45,12 @@
     <Compile Include="IRoleAssignment.cs" />
     <Compile Include="IRoleAssignmentProvider.cs" />
     <Compile Include="IRoleDefinition.cs" />
+    <Compile Include="Validators.RoleDefinition.cs" />
     <Compile Include="ScopePrefixMatcher.cs" />
     <Compile Include="IRoleDefinitionProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SimpleRoleDefinition.cs" />
+    <Compile Include="MemoryRoleDefinitionProvider.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
