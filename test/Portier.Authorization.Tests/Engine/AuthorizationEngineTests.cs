@@ -9,7 +9,7 @@ using System.Security.Claims;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Portier.Authorization.Tests.Common;
 
-namespace Portier.Authorization.Tests.Engine
+namespace Portier.Authorization.Tests
 {
     [TestClass]
     public class AuthorizationEngineTests

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 
-namespace Portier.Authorization.Tests.Engine
+namespace Portier.Authorization.Tests
 {
     /// <summary>
     /// A generic Role Assignment Provider for testing.
