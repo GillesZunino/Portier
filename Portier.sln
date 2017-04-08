@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Portier.Authorization.NetSt
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{0F060775-7088-4AAB-A7E6-96A3FD0CFFC4}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Portier.Authorization.Tests.NetCore", "test\Portier.Authorization.Tests.NetCore\Portier.Authorization.Tests.NetCore.csproj", "{870BE12F-B5C5-4304-9D79-5FABA880C5EE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,11 +33,16 @@ Global
 		{4025CCEA-AC5A-42F7-B4FF-B82536683EB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4025CCEA-AC5A-42F7-B4FF-B82536683EB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4025CCEA-AC5A-42F7-B4FF-B82536683EB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{870BE12F-B5C5-4304-9D79-5FABA880C5EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{870BE12F-B5C5-4304-9D79-5FABA880C5EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{870BE12F-B5C5-4304-9D79-5FABA880C5EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{870BE12F-B5C5-4304-9D79-5FABA880C5EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{001B7029-3B43-4234-A8C1-1433F5D47DE6} = {0F060775-7088-4AAB-A7E6-96A3FD0CFFC4}
+		{870BE12F-B5C5-4304-9D79-5FABA880C5EE} = {0F060775-7088-4AAB-A7E6-96A3FD0CFFC4}
 	EndGlobalSection
 EndGlobal
