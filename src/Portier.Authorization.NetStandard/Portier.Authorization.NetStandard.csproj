@@ -1,0 +1,41 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Description>Microsoft Azure Style Role Based Access Control (RBAC) library</Description>
+    <Authors>Gilles Zunino</Authors>
+    <TargetFramework>netstandard1.6</TargetFramework>
+    <DefineConstants>$(DefineConstants);NETCORE</DefineConstants>
+    <DebugType>portable</DebugType>
+    <AssemblyName>Portier.Authorization</AssemblyName>
+    <PackageId>Portier.Authorization.NetStandard</PackageId>
+    <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
+    <PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
+    <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
+    <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
+    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
+    <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Portier.Authorization\AuthorizationCheckCallback.cs" Link="AuthorizationCheckCallback.cs" />
+    <Compile Include="..\Portier.Authorization\AuthorizationDecision.cs" Link="AuthorizationDecision.cs" />
+    <Compile Include="..\Portier.Authorization\AuthorizationEngine.cs" Link="AuthorizationEngine.cs" />
+    <Compile Include="..\Portier.Authorization\IAuthorizationEngine.cs" Link="IAuthorizationEngine.cs" />
+    <Compile Include="..\Portier.Authorization\IRoleAssignment.cs" Link="IRoleAssignment.cs" />
+    <Compile Include="..\Portier.Authorization\IRoleAssignmentProvider.cs" Link="IRoleAssignmentProvider.cs" />
+    <Compile Include="..\Portier.Authorization\IRoleDefinition.cs" Link="IRoleDefinition.cs" />
+    <Compile Include="..\Portier.Authorization\IRoleDefinitionProvider.cs" Link="IRoleDefinitionProvider.cs" />
+    <Compile Include="..\Portier.Authorization\MemoryRoleDefinitionProvider.cs" Link="MemoryRoleDefinitionProvider.cs" />
+    <Compile Include="..\Portier.Authorization\PermissionPatternMatcher.cs" Link="PermissionPatternMatcher.cs" />
+    <Compile Include="..\Portier.Authorization\RoleDefinition.cs" Link="RoleDefinition.cs" />
+    <Compile Include="..\Portier.Authorization\ScopePrefixMatcher.cs" Link="ScopePrefixMatcher.cs" />
+    <Compile Include="..\Portier.Authorization\Validators.RoleDefinition.cs" Link="Validators.RoleDefinition.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Security.Claims" Version="4.3.0" />
+  </ItemGroup>
+</Project>

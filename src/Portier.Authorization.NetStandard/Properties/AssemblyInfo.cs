@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 
 [assembly: AssemblyTitle("Portier.Authorization")]
 [assembly: AssemblyDescription("Microsoft Azure Style Role Based Access Control (RBAC) library")]
-[assembly: AssemblyConfiguration(".NETCore")]
+[assembly: AssemblyConfiguration(".NETStandard")]
 [assembly: AssemblyCompany("Akakani")]
 [assembly: AssemblyProduct("Portier.Authorization")]
 [assembly: AssemblyCopyright("Copyright © Gilles Zunino 2016")]

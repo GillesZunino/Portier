@@ -1,13 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26403.0
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{8B7070EB-F4EC-4509-8E3D-420F9EE51582}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portier.Authorization.Net46", "src\Portier.Authorization.NET46\Portier.Authorization.Net46.csproj", "{22BDA82F-CA9B-411C-8269-7138F9C407EF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portier.Authorization.Tests.Net46", "test\Portier.Authorization.Tests.Net46\Portier.Authorization.Tests.Net46.csproj", "{001B7029-3B43-4234-A8C1-1433F5D47DE6}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Portier.Authorization.NetStandard", "src\Portier.Authorization.NetStandard\Portier.Authorization.NetStandard.xproj", "{4025CCEA-AC5A-42F7-B4FF-B82536683EB2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Portier.Authorization.NetStandard", "src\Portier.Authorization.NetStandard\Portier.Authorization.NetStandard.csproj", "{4025CCEA-AC5A-42F7-B4FF-B82536683EB2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{0F060775-7088-4AAB-A7E6-96A3FD0CFFC4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,5 +34,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{001B7029-3B43-4234-A8C1-1433F5D47DE6} = {0F060775-7088-4AAB-A7E6-96A3FD0CFFC4}
 	EndGlobalSection
 EndGlobal
