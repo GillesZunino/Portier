@@ -18,6 +18,11 @@ namespace Portier.Authorization
         /// <param name="roleDefinition">Role definition instance to validate.</param>
         public static void ValidateRoleDefinition(IRoleDefinition roleDefinition)
         {
+            if (roleDefinition == null)
+            {
+                throw new ArgumentNullException(nameof(roleDefinition));
+            }
+
             ValidateRoleDefinitionComponents(roleDefinition.Id, roleDefinition.AssignableScopes, roleDefinition.Permissions);
         }
 
