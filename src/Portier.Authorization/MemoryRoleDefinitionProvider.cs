@@ -36,8 +36,7 @@ namespace Portier.Authorization
         /// <remarks>Comparisons against id are be done using StringComparison.OrdinalIgnoreCase.</remarks>
         public IRoleDefinition GetRoleDefinitionById(string id)
         {
-            IRoleDefinition roleDefinition;
-            if (AllRoleDefinitions.TryGetValue(id, out roleDefinition))
+            if (AllRoleDefinitions.TryGetValue(id, out IRoleDefinition roleDefinition))
             {
                 return roleDefinition;
             }

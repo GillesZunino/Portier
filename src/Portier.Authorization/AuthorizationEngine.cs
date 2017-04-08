@@ -34,18 +34,8 @@ namespace Portier.Authorization
         /// <param name="roleDefinitionProvider">Instance of role definition provider <see cref="IRoleDefinitionProvider"/>.</param>
         public AuthorizationEngine(IRoleAssignmentProvider roleAssignmentProvider, IRoleDefinitionProvider roleDefinitionProvider)
         {
-            if (roleAssignmentProvider == null)
-            {
-                throw new ArgumentNullException(nameof(roleAssignmentProvider));
-            }
-
-            if (roleDefinitionProvider == null)
-            {
-                throw new ArgumentNullException(nameof(roleDefinitionProvider));
-            }
-
-            RoleAssignmentProvider = roleAssignmentProvider;
-            RoleDefinitionProvider = roleDefinitionProvider;
+            RoleAssignmentProvider = roleAssignmentProvider ?? throw new ArgumentNullException(nameof(roleAssignmentProvider));
+            RoleDefinitionProvider = roleDefinitionProvider ?? throw new ArgumentNullException(nameof(roleDefinitionProvider));
         }
 
         /// <summary>

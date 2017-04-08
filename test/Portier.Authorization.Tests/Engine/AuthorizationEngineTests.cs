@@ -250,8 +250,7 @@ namespace Portier.Authorization.Tests
                 roleAssignments,
                 (roleAssignment, claimsIdentity) =>
                 {
-                    TestRoleAssignment testRoleAssignment = roleAssignment as TestRoleAssignment;
-                    if (testRoleAssignment != null)
+                    if (roleAssignment is TestRoleAssignment testRoleAssignment)
                     {
                         Claim objectIdClaim = claimsIdentity.Claims.FirstOrDefault<Claim>(claim => claim.Type == ObjectIdentifierClaim);
                         return objectIdClaim != null && string.Compare(objectIdClaim.Value, testRoleAssignment.PrincipalId, StringComparison.OrdinalIgnoreCase) == 0;
@@ -266,10 +265,11 @@ namespace Portier.Authorization.Tests
 
         private static ClaimsIdentity GetClaimsIdentity()
         {
-            List<Claim> claims = new List<Claim>();
-            claims.Add(new Claim(ObjectIdentifierClaim, "94eee687-978a-434d-bd7f-dd479b3971e6"));
-            claims.Add(new Claim(UpnClaim, "bumble_bee@beedaycare.com"));
-
+            List<Claim> claims = new List<Claim>
+            {
+                new Claim(ObjectIdentifierClaim, "94eee687-978a-434d-bd7f-dd479b3971e6"),
+                new Claim(UpnClaim, "bumble_bee@beedaycare.com")
+            };
             return new ClaimsIdentity(claims);
         }
     }
