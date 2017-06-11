@@ -3,9 +3,6 @@
 // -----------------------------------------------------------------------------------
 
 using System;
-using System.Globalization;
-using System.Linq;
-using System.Runtime.CompilerServices;
 
 namespace Portier.Authorization
 {
@@ -14,8 +11,15 @@ namespace Portier.Authorization
     /// </summary>
     public static class PermissionPatternMatcher
     {
-        private const string Wildcard = "*";
-        private static readonly char[] PermissionDelimiters = new char[] { '/' };
+        /// <summary>
+        /// Permission wildcard character.
+        /// </summary>
+        public const string Wildcard = "*";
+
+        /// <summary>
+        /// Collection of valid permission delimiters.
+        /// </summary>
+        public static readonly char[] PermissionDelimiters = new char[] { '/' };
 
         /// <summary>
         /// Determines wether an RBAC permission matches an RBAC pattern.
@@ -25,8 +29,8 @@ namespace Portier.Authorization
         /// <returns>true if the specified permission matches the pattern; otherwise, false.</returns>
         public static bool IsMatch(string pattern, string permission)
         {
-            ValidatePermissionPattern(pattern, nameof(pattern));
-            ValidatePermission(permission, nameof(permission));
+            Validators.ValidatePermissionPattern(pattern);
+            Validators.ValidatePermission(permission);
 
             // Split both the permission pattern (Microsoft.Compute/virtualMachine/*/read) and the permission (Microsoft.Compute/virtualMachine/myLittleVm/read) on the delimiter ("/")
             string[] patternComponents = pattern.Split(PermissionDelimiters, StringSplitOptions.RemoveEmptyEntries);
@@ -121,52 +125,6 @@ namespace Portier.Authorization
                     // The pattern has been entirely scanned - We have found a match
                     return true;
                 }
-            }
-        }
-
-        /// <summary>
-        /// Validates a permission. Errors are reported via exceptions.
-        /// </summary>
-        /// <param name="permission">Permission to validate.</param>
-        /// <param name="argumentName">Name of argument in case of failure.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void ValidatePermission(string permission, string argumentName)
-        {
-            if (string.IsNullOrEmpty(permission))
-            {
-                throw new ArgumentOutOfRangeException(argumentName, "Permission must not be null or empty");
-            }
-
-            // Permission must not contain wildcards
-            if (permission.Contains(Wildcard))
-            {
-                throw new ArgumentOutOfRangeException(argumentName, string.Format(CultureInfo.CurrentCulture, "Permission cannot contain wildcards - '{0}'", permission));
-            }
-
-            // Permission must not start with one of the component delimiter we know
-            if (PermissionDelimiters.Any((c) => c == permission[0]))
-            {
-                throw new ArgumentOutOfRangeException(argumentName, string.Format(CultureInfo.CurrentCulture, "Permission '{0}' must not start with a delimiter (one of '{1}')", permission, string.Join(", ", PermissionDelimiters)));
-            }
-        }
-
-        /// <summary>
-        /// Validates a permission pattern. Errors are reported via exceptions.
-        /// </summary>
-        /// <param name="pattern">Permission pattern to validate.</param>
-        /// <param name="argumentName">Name of argument in case of failure.</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void ValidatePermissionPattern(string pattern, string argumentName)
-        {
-            if (string.IsNullOrEmpty(pattern))
-            {
-                throw new ArgumentOutOfRangeException(argumentName, "Permission pattern must not be null or empty");
-            }
-
-            // Pattern must not start with one of the component delimiter we know
-            if (PermissionDelimiters.Any((c) => c == pattern[0]))
-            {
-                throw new ArgumentOutOfRangeException(argumentName, string.Format(CultureInfo.CurrentCulture, "Permission pattern '{0}' must not start with a delimiter (one of '{1}')", pattern, string.Join(", ", PermissionDelimiters)));
             }
         }
     }

@@ -56,7 +56,7 @@ namespace Portier.Authorization
             {
                 hasEntries = true;
 
-                PermissionPatternMatcher.ValidatePermissionPattern(permission, nameof(permissions));
+                Validators.ValidatePermissionPattern(permission);
             }
 
             if (!hasEntries)

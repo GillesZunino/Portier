@@ -80,7 +80,7 @@ namespace Portier.Authorization
             }
 
             Validators.ValidateScope(resource);
-            PermissionPatternMatcher.ValidatePermission(permission, nameof(permission));
+            Validators.ValidatePermission(permission);
 
             if (authorizationCheck == null)
             {
