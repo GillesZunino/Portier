@@ -10,7 +10,7 @@ using System.Globalization;
 namespace Portier.Authorization
 {
     /// <summary>
-    /// An role definition providers capable of resolving role definitions from a static set of role definitions completely held in memory.
+    /// A role definition provider capable of resolving role definitions from a static set of role definitions completely held in memory.
     /// </summary>
     public class MemoryRoleDefinitionProvider : IRoleDefinitionProvider
     {
@@ -29,7 +29,7 @@ namespace Portier.Authorization
         }
 
         /// <summary>
-        /// Gets a role defition by its id.
+        /// Gets a role defition by id.
         /// </summary>
         /// <param name="roleDefinitionId">Globally unique identifier.</param>
         /// <returns>Role definition if found, null otherwise.</returns>
