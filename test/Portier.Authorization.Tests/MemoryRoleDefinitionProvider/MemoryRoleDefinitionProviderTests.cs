@@ -119,7 +119,7 @@ namespace Portier.Authorization.Tests
 
             AssertExtensions.ShouldThrow(
                 () => { new MemoryRoleDefinitionProvider(badRoleDefinition); },
-                (exception) => { return exception.GetType() == typeof(ArgumentOutOfRangeException); }
+                (exception) => { return exception.GetType() == typeof(ArgumentNullException); }
             );
 
             badRoleDefinition = new List<UnvalidatedRoleDefinition>()

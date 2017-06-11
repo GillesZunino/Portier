@@ -23,7 +23,7 @@ namespace Portier.Authorization
         public IRoleAssignmentProvider RoleAssignmentProvider { get; private set; }
 
         /// <summary>
-        /// Gets the role defiunition provider currently in use by the authorization engine.
+        /// Gets the role definition provider currently in use by the authorization engine.
         /// </summary>
         public IRoleDefinitionProvider RoleDefinitionProvider { get; private set; }
 
@@ -79,7 +79,7 @@ namespace Portier.Authorization
                 throw new ArgumentNullException(nameof(claimsIdentity));
             }
 
-            ScopePrefixMatcher.ValidateScope(resource, nameof(resource));
+            Validators.ValidateScope(resource);
             PermissionPatternMatcher.ValidatePermission(permission, nameof(permission));
 
             if (authorizationCheck == null)

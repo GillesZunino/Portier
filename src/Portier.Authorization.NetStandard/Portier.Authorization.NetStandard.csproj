@@ -33,6 +33,7 @@
     <Compile Include="..\Portier.Authorization\RoleDefinition.cs" Link="RoleDefinition.cs" />
     <Compile Include="..\Portier.Authorization\ScopePrefixMatcher.cs" Link="ScopePrefixMatcher.cs" />
     <Compile Include="..\Portier.Authorization\Validators.RoleDefinition.cs" Link="Validators.RoleDefinition.cs" />
+    <Compile Include="..\Portier.Authorization\Validators.Scope.cs" Link="Validators.Scope.cs" />
   </ItemGroup>
 
   <ItemGroup>

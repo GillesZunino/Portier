@@ -48,7 +48,7 @@ namespace Portier.Authorization.Tests
                         }
                     );
                 },
-                (exception) => { return exception.GetType() == typeof(ArgumentOutOfRangeException); }
+                (exception) => { return exception.GetType() == typeof(ArgumentNullException); }
             );
 
             AssertExtensions.ShouldThrow(

@@ -40,29 +40,7 @@ namespace Portier.Authorization
             }
 
             ValidatePermissions(permissions);
-            ValidateAssignableScopes(assignableScopes);
-        }
-
-        private static void ValidateAssignableScopes(IEnumerable<string> assignableScopes)
-        {
-            if (assignableScopes == null)
-            {
-                throw new ArgumentOutOfRangeException(nameof(assignableScopes), "Role Definition 'AssignableScopes' cannot be null");
-            }
-
-            // There must be at least one scope - All scopes must be valid
-            bool hasEntries = false;
-            foreach (string scope in assignableScopes)
-            {
-                hasEntries = true;
-
-                ScopePrefixMatcher.ValidateScope(scope, nameof(assignableScopes));
-            }
-
-            if (!hasEntries)
-            {
-                throw new ArgumentOutOfRangeException(nameof(assignableScopes), "Role Definition 'AssignableScopes' must contain at least one entry");
-            }
+            Validators.ValidateScopes(assignableScopes);
         }
 
         private static void ValidatePermissions(IEnumerable<string> permissions)
