@@ -21,19 +21,19 @@ namespace Portier.Authorization
         {
             if (string.IsNullOrEmpty(permission))
             {
-                throw new ArgumentOutOfRangeException(nameof(permission), "Permission must not be null or empty");
+                throw new ArgumentOutOfRangeException(nameof(permission), Resources.GetString("Validators_PermissionMustNotBeNullOrEmpty"));
             }
 
             // Permission must not contain wildcards
             if (permission.Contains(PermissionPatternMatcher.Wildcard))
             {
-                throw new ArgumentOutOfRangeException(nameof(permission), string.Format(CultureInfo.CurrentCulture, "Permission cannot contain wildcards - '{0}'", permission));
+                throw new ArgumentOutOfRangeException(nameof(permission), string.Format(CultureInfo.CurrentCulture, Resources.GetString("Validators_PermissionCannotContainWildcards"), permission));
             }
 
             // Permission must not start with one of the component delimiter we know
             if (PermissionPatternMatcher.PermissionDelimiters.Any((c) => c == permission[0]))
             {
-                throw new ArgumentOutOfRangeException(nameof(permission), string.Format(CultureInfo.CurrentCulture, "Permission '{0}' must not start with a delimiter (one of '{1}')", permission, string.Join(", ", PermissionPatternMatcher.PermissionDelimiters)));
+                throw new ArgumentOutOfRangeException(nameof(permission), string.Format(CultureInfo.CurrentCulture, Resources.GetString("Validators_PermissionMustNotStartWithDelimiter"), permission, string.Join(", ", PermissionPatternMatcher.PermissionDelimiters)));
             }
         }
 
@@ -45,13 +45,13 @@ namespace Portier.Authorization
         {
             if (string.IsNullOrEmpty(pattern))
             {
-                throw new ArgumentOutOfRangeException(nameof(pattern), "Permission pattern must not be null or empty");
+                throw new ArgumentOutOfRangeException(nameof(pattern), Resources.GetString("Validators_PermissionPatternMustNotBeNullOrEmpty"));
             }
 
             // Pattern must not start with one of the component delimiter we know
             if (PermissionPatternMatcher.PermissionDelimiters.Any((c) => c == pattern[0]))
             {
-                throw new ArgumentOutOfRangeException(nameof(pattern), string.Format(CultureInfo.CurrentCulture, "Permission pattern '{0}' must not start with a delimiter (one of '{1}')", pattern, string.Join(", ", PermissionPatternMatcher.PermissionDelimiters)));
+                throw new ArgumentOutOfRangeException(nameof(pattern), string.Format(CultureInfo.CurrentCulture, Resources.GetString("Validators_PermissionPatternMustNotStartWithDelimiter"), pattern, string.Join(", ", PermissionPatternMatcher.PermissionDelimiters)));
             }
         }
     }

@@ -6,7 +6,7 @@
     <DefineConstants>$(DefineConstants);NETCORE</DefineConstants>
     <DebugType>portable</DebugType>
     <AssemblyName>Portier.Authorization</AssemblyName>
-    <PackageId>Portier.Authorization.NetStandard</PackageId>
+    <PackageId>Portier.Authorization</PackageId>
     <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
     <PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
@@ -17,7 +17,12 @@
     <GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
     <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
     <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
+    <RootNamespace>Portier.Authorization</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Security.Claims" Version="4.3.0" />
+  </ItemGroup>
 
   <ItemGroup>
     <Compile Include="..\Portier.Authorization\AuthorizationCheckCallback.cs" Link="AuthorizationCheckCallback.cs" />
@@ -38,6 +43,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Security.Claims" Version="4.3.0" />
+    <EmbeddedResource Include="..\Portier.Authorization\Resources\Resources.resx" Link="Resources\Resources.resx" />
   </ItemGroup>
 </Project>

@@ -23,13 +23,13 @@ namespace Portier.Authorization
             // Scope must not  be null or empty
             if (string.IsNullOrEmpty(scope))
             {
-                throw new ArgumentOutOfRangeException(nameof(scope), "Scope must not be null or empty");
+                throw new ArgumentOutOfRangeException(nameof(scope), Resources.GetString("Validators_ScopeMustNotBeNullOrEmpty"));
             }
 
             // Scope must be rooted (start with one of the component delimiter we know)
             if (ScopePrefixMatcher.ScopeComponentDelimiters.Any((c) => c != scope[0]))
             {
-                throw new ArgumentOutOfRangeException(nameof(scope), string.Format(CultureInfo.CurrentCulture, "Scope '{0}' must start with a delimiter (one of '{1}')", scope, string.Join(", ", ScopePrefixMatcher.ScopeComponentDelimiters)));
+                throw new ArgumentOutOfRangeException(nameof(scope), string.Format(CultureInfo.CurrentCulture, Resources.GetString("Validators_ScopeMustStartWithDelimiter"), scope, string.Join(", ", ScopePrefixMatcher.ScopeComponentDelimiters)));
             }
         }
 
@@ -41,7 +41,7 @@ namespace Portier.Authorization
         {
             if (scopes == null)
             {
-                throw new ArgumentNullException(nameof(scopes), "Collection of scopes cannot be null");
+                throw new ArgumentNullException(nameof(scopes), Resources.GetString("Validators_CollectionOfScopesCannotBeNull"));
             }
 
             bool hasParents = false;
@@ -54,7 +54,7 @@ namespace Portier.Authorization
 
             if (!hasParents)
             {
-                throw new ArgumentOutOfRangeException(nameof(scopes), "At least one scope must be provided");
+                throw new ArgumentOutOfRangeException(nameof(scopes), Resources.GetString("Validators_CollectionOfScopesMustContainOneEntry"));
             }
         }
     }

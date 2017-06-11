@@ -36,7 +36,7 @@ namespace Portier.Authorization
         {
             if (string.IsNullOrEmpty(id))
             {
-                throw new ArgumentOutOfRangeException(nameof(id), "Role Definition 'Id' cannot be null or empty");
+                throw new ArgumentOutOfRangeException(nameof(id), Resources.GetString("Validators_RoleDefinitionIdMustNotBeNullOrEmpty"));
             }
 
             ValidatePermissions(permissions);
@@ -47,7 +47,7 @@ namespace Portier.Authorization
         {
             if (permissions == null)
             {
-                throw new ArgumentOutOfRangeException(nameof(permissions), "Role Definition 'Permissions' cannot be null");
+                throw new ArgumentOutOfRangeException(nameof(permissions), Resources.GetString("Validators_RoleDefinitionPermissionsMustNotBeNull"));
             }
 
             // There must be at least one permission - All permissions must be valid
@@ -61,7 +61,7 @@ namespace Portier.Authorization
 
             if (!hasEntries)
             {
-                throw new ArgumentOutOfRangeException(nameof(permissions), "Role Definition 'AssignableScopes' must contain at least one entry");
+                throw new ArgumentOutOfRangeException(nameof(permissions), Resources.GetString("Validators_RoleDefinitionAssignableScopesMustContainOneEntry"));
             }
         }
     }
