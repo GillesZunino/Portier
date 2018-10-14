@@ -69,7 +69,7 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Portier.Authorization.NET46\Portier.Authorization.Net46.csproj">
+    <ProjectReference Include="..\..\src\Portier.Authorization.NetFx\Portier.Authorization.NetFx.csproj">
       <Project>{22bda82f-ca9b-411c-8269-7138f9c407ef}</Project>
       <Name>Portier.Authorization.Net46</Name>
     </ProjectReference>

@@ -5,9 +5,9 @@ VisualStudioVersion = 15.0.26430.13
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{8B7070EB-F4EC-4509-8E3D-420F9EE51582}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portier.Authorization.Net46", "src\Portier.Authorization.NET46\Portier.Authorization.Net46.csproj", "{22BDA82F-CA9B-411C-8269-7138F9C407EF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portier.Authorization.NetFx", "src\Portier.Authorization.NetFx\Portier.Authorization.NetFx.csproj", "{22BDA82F-CA9B-411C-8269-7138F9C407EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portier.Authorization.Tests.Net46", "test\Portier.Authorization.Tests.Net46\Portier.Authorization.Tests.Net46.csproj", "{001B7029-3B43-4234-A8C1-1433F5D47DE6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Portier.Authorization.Tests.NetFx", "test\Portier.Authorization.Tests.NetFx\Portier.Authorization.Tests.NetFx.csproj", "{001B7029-3B43-4234-A8C1-1433F5D47DE6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Portier.Authorization.NetStandard", "src\Portier.Authorization.NetStandard\Portier.Authorization.NetStandard.csproj", "{4025CCEA-AC5A-42F7-B4FF-B82536683EB2}"
 EndProject
