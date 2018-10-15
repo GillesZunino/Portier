@@ -22,7 +22,7 @@ namespace Portier.Authorization
         {
             get
             {
-                if (object.ReferenceEquals(resourceManager, null))
+                if (resourceManager == null)
                 {
                     ResourceManager temp = new ResourceManager("Portier.Authorization.Resources.Resources", typeof(Resources).GetTypeInfo().Assembly);
                     resourceManager = temp;
