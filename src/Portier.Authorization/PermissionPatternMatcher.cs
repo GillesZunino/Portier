@@ -3,6 +3,7 @@
 // -----------------------------------------------------------------------------------
 
 using System;
+using System.Collections.ObjectModel;
 
 namespace Portier.Authorization
 {
@@ -11,6 +12,8 @@ namespace Portier.Authorization
     /// </summary>
     public static class PermissionPatternMatcher
     {
+        private static readonly char[] permissionDelimiters = new char[] { '/' };
+
         /// <summary>
         /// Permission wildcard character.
         /// </summary>
@@ -19,7 +22,7 @@ namespace Portier.Authorization
         /// <summary>
         /// Collection of valid permission delimiters.
         /// </summary>
-        public static readonly char[] PermissionDelimiters = new char[] { '/' };
+        public static readonly ReadOnlyCollection<char> PermissionDelimiters = new ReadOnlyCollection<char>(permissionDelimiters);
 
         /// <summary>
         /// Determines wether an RBAC permission matches an RBAC pattern.
@@ -33,8 +36,8 @@ namespace Portier.Authorization
             Validators.ValidatePermission(permission);
 
             // Split both the permission pattern (Microsoft.Compute/virtualMachine/*/read) and the permission (Microsoft.Compute/virtualMachine/myLittleVm/read) on the delimiter ("/")
-            string[] patternComponents = pattern.Split(PermissionDelimiters, StringSplitOptions.RemoveEmptyEntries);
-            string[] permissionComponents = permission.Split(PermissionDelimiters, StringSplitOptions.RemoveEmptyEntries);
+            string[] patternComponents = pattern.Split(permissionDelimiters, StringSplitOptions.RemoveEmptyEntries);
+            string[] permissionComponents = permission.Split(permissionDelimiters, StringSplitOptions.RemoveEmptyEntries);
 
             int patternSegmentIndex = 0;
             int permissionSegmentIndex = 0;

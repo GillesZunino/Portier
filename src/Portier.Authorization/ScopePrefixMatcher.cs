@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace Portier.Authorization
@@ -13,10 +14,11 @@ namespace Portier.Authorization
     /// </summary>
     public static class ScopePrefixMatcher
     {
+        private static readonly char[] scopeComponentDelimiters = new char[] { '/' };
         /// <summary>
         /// Collection of valid component delimiters.
         /// </summary>
-        public static readonly char[] ScopeComponentDelimiters = new char[] { '/' };
+        public static readonly ReadOnlyCollection<char> ScopeComponentDelimiters = new ReadOnlyCollection<char>(scopeComponentDelimiters);
 
         /// <summary>
         /// Checks if the given child scope matches the parent scope.
@@ -75,7 +77,7 @@ namespace Portier.Authorization
 
         private static string[] GetScopeComponents(string scope)
         {
-            return scope.Split(ScopeComponentDelimiters, StringSplitOptions.RemoveEmptyEntries);
+            return scope.Split(scopeComponentDelimiters, StringSplitOptions.RemoveEmptyEntries);
         }
     }
 }
