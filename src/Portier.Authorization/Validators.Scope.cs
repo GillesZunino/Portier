@@ -5,7 +5,6 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 
 namespace Portier.Authorization
 {
@@ -27,7 +26,18 @@ namespace Portier.Authorization
             }
 
             // Scope must be rooted (start with one of the component delimiter we know)
-            if (ScopePrefixMatcher.ScopeComponentDelimiters.Any((c) => c != scope[0]))
+            // PERFORMANCE: We do not use LINQ or foreach here as they allocate memory
+            bool found = false;
+            for (int index = 0; index < ScopePrefixMatcher.ScopeComponentDelimiters.Count; index++)
+            {
+                if (scope[0] == ScopePrefixMatcher.ScopeComponentDelimiters[index])
+                {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found)
             {
                 throw new ArgumentOutOfRangeException(nameof(scope), string.Format(CultureInfo.CurrentCulture, Resources.GetString("Validators_ScopeMustStartWithDelimiter"), scope, string.Join(", ", ScopePrefixMatcher.ScopeComponentDelimiters)));
             }
