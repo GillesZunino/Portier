@@ -5,7 +5,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 
 namespace Portier.Authorization
 {
@@ -48,7 +47,17 @@ namespace Portier.Authorization
             Validators.ValidateScope(child);
 
             string[] childComponents = GetScopeComponents(child);
-            return parents.Any(parent => ScopeComponentsPrefixMatchChild(GetScopeComponents(parent), childComponents));
+
+            // PERFORMANCE: We do not use LINQ (parents.Any(...)) as it allocates memory
+            foreach (string parent in parents)
+            {
+                if (ScopeComponentsPrefixMatchChild(GetScopeComponents(parent), childComponents))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private static bool ScopeComponentsPrefixMatchChild(string[] scopeComponents, string[] childComponents)
