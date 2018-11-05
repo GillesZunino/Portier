@@ -14,10 +14,11 @@ namespace Portier.Authorization
     public static class ScopePrefixMatcher
     {
         private static readonly char[] scopeComponentDelimiters = new char[] { '/' };
+
         /// <summary>
         /// Collection of valid component delimiters.
         /// </summary>
-        public static readonly ReadOnlyCollection<char> ScopeComponentDelimiters = new ReadOnlyCollection<char>(scopeComponentDelimiters);
+        public static readonly IReadOnlyList<char> ScopeComponentDelimiters = new ReadOnlyCollection<char>(scopeComponentDelimiters);
 
         /// <summary>
         /// Checks if the given child scope matches the parent scope.
