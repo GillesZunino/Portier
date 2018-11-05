@@ -40,22 +40,22 @@ namespace Portier.Authorization.Tests
             );
 
             AssertExtensions.ShouldThrow(
-                () => { ScopePrefixMatcher.IsPrefixMatch(new string[] { }, null); },
+                () => { ScopePrefixMatcher.IsPrefixMatch((IEnumerable<string>) new string[] { }, null); },
                 (exception) => { return exception.GetType() == typeof(ArgumentOutOfRangeException); }
             );
 
             AssertExtensions.ShouldThrow(
-                () => { ScopePrefixMatcher.IsPrefixMatch(new string[] { }, "/a"); },
+                () => { ScopePrefixMatcher.IsPrefixMatch((IEnumerable<string>) new string[] { }, "/a"); },
                 (exception) => { return exception.GetType() == typeof(ArgumentOutOfRangeException); }
             );
 
             AssertExtensions.ShouldThrow(
-                () => { ScopePrefixMatcher.IsPrefixMatch(new string[] { "/a", "b" }, "b"); },
+                () => { ScopePrefixMatcher.IsPrefixMatch((IEnumerable<string>) new string[] { "/a", "b" }, "b"); },
                 (exception) => { return exception.GetType() == typeof(ArgumentOutOfRangeException); }
             );
 
             AssertExtensions.ShouldThrow(
-                () => { ScopePrefixMatcher.IsPrefixMatch(new string[] { "/a", "b" }, "b"); },
+                () => { ScopePrefixMatcher.IsPrefixMatch((IEnumerable<string>) new string[] { "/a", "b" }, "b"); },
                 (exception) => { return exception.GetType() == typeof(ArgumentOutOfRangeException); }
             );
 
@@ -103,10 +103,10 @@ namespace Portier.Authorization.Tests
             string[] parents = new string[] { "/a", "/" };
         
             child = "/Foo/Bar";
-            Assert.IsTrue(ScopePrefixMatcher.IsPrefixMatch(parents, child), "Child '{0}' matches parents '{1}'", child, string.Join(", ", parents));
+            Assert.IsTrue(ScopePrefixMatcher.IsPrefixMatch((IEnumerable<string>) parents, child), "Child '{0}' matches parents '{1}'", child, string.Join(", ", parents));
 
             child = "/Foo/Bar";
-            Assert.IsTrue(ScopePrefixMatcher.IsPrefixMatch(parents, child), "Child '{0}' matches parents '{1}'", child, string.Join(", ", parents));
+            Assert.IsTrue(ScopePrefixMatcher.IsPrefixMatch((IEnumerable<string>) parents, child), "Child '{0}' matches parents '{1}'", child, string.Join(", ", parents));
 
 
             // ScopePrefixMatcher.IsPrefixMatch(IReadOnlyList<string>, string)
@@ -145,20 +145,20 @@ namespace Portier.Authorization.Tests
             string[] parents = new string[] { "/Foo", "/Froggle/Bar" };
 
             child = "/Foo";
-            Assert.IsTrue(ScopePrefixMatcher.IsPrefixMatch(parents, child), "Child '{0}' matches parents '{1}'", child, string.Join(", ", parents));
+            Assert.IsTrue(ScopePrefixMatcher.IsPrefixMatch((IEnumerable<string>) parents, child), "Child '{0}' matches parents '{1}'", child, string.Join(", ", parents));
 
             child = "/Foo/Bar/XX";
-            Assert.IsTrue(ScopePrefixMatcher.IsPrefixMatch(parents, child), "Child '{0}' matches parents '{1}'", child, string.Join(", ", parents));
+            Assert.IsTrue(ScopePrefixMatcher.IsPrefixMatch((IEnumerable<string>) parents, child), "Child '{0}' matches parents '{1}'", child, string.Join(", ", parents));
 
             child = "/Froggle/Bar/YYY";
-            Assert.IsTrue(ScopePrefixMatcher.IsPrefixMatch(parents, child), "Child '{0}' matches parents '{1}'", child, string.Join(", ", parents));
+            Assert.IsTrue(ScopePrefixMatcher.IsPrefixMatch((IEnumerable<string>) parents, child), "Child '{0}' matches parents '{1}'", child, string.Join(", ", parents));
 
             // No match
             child = "/ZZZ";
-            Assert.IsFalse(ScopePrefixMatcher.IsPrefixMatch(parents, child), "Child '{0}' matches parents '{1}'", child, string.Join(", ", parents));
+            Assert.IsFalse(ScopePrefixMatcher.IsPrefixMatch((IEnumerable<string>) parents, child), "Child '{0}' matches parents '{1}'", child, string.Join(", ", parents));
 
             child = "/TTT/Bar/YYY";
-            Assert.IsFalse(ScopePrefixMatcher.IsPrefixMatch(parents, child), "Child '{0}' matches parents '{1}'", child, string.Join(", ", parents));
+            Assert.IsFalse(ScopePrefixMatcher.IsPrefixMatch((IEnumerable<string>) parents, child), "Child '{0}' matches parents '{1}'", child, string.Join(", ", parents));
 
 
             // ScopePrefixMatcher.IsPrefixMatch(IReadOnlyList<string>, string)
@@ -198,13 +198,13 @@ namespace Portier.Authorization.Tests
             string[] parents = new string[] { "/fOo", "/FroGglE/baR" };
 
             child = "/FoO";
-            Assert.IsTrue(ScopePrefixMatcher.IsPrefixMatch(parents, child), "Child '{0}' matches parents '{1}'", child, string.Join(", ", parents));
+            Assert.IsTrue(ScopePrefixMatcher.IsPrefixMatch((IEnumerable<string>) parents, child), "Child '{0}' matches parents '{1}'", child, string.Join(", ", parents));
 
             child = "/FOO/BAr/xX";
-            Assert.IsTrue(ScopePrefixMatcher.IsPrefixMatch(parents, child), "Child '{0}' matches parents '{1}'", child, string.Join(", ", parents));
+            Assert.IsTrue(ScopePrefixMatcher.IsPrefixMatch((IEnumerable<string>) parents, child), "Child '{0}' matches parents '{1}'", child, string.Join(", ", parents));
 
             child = "/frogGLE/bAr/YYY";
-            Assert.IsTrue(ScopePrefixMatcher.IsPrefixMatch(parents, child), "Child '{0}' matches parents '{1}'", child, string.Join(", ", parents));
+            Assert.IsTrue(ScopePrefixMatcher.IsPrefixMatch((IEnumerable<string>) parents, child), "Child '{0}' matches parents '{1}'", child, string.Join(", ", parents));
 
 
             // ScopePrefixMatcher.IsPrefixMatch(IReadOnlyList<string>, string)
@@ -237,10 +237,10 @@ namespace Portier.Authorization.Tests
             string[] parents = new string[] { "/fOo///Bar", "/FroGglE/baR" };
 
             child = "/FOO///BAr////////xX";
-            Assert.IsTrue(ScopePrefixMatcher.IsPrefixMatch(parents, child), "Child '{0}' matches parents '{1}'", child, string.Join(", ", parents));
+            Assert.IsTrue(ScopePrefixMatcher.IsPrefixMatch((IEnumerable<string>) parents, child), "Child '{0}' matches parents '{1}'", child, string.Join(", ", parents));
 
             child = "///frogGLE/bAr///YYY";
-            Assert.IsTrue(ScopePrefixMatcher.IsPrefixMatch(parents, child), "Child '{0}' matches parents '{1}'", child, string.Join(", ", parents));
+            Assert.IsTrue(ScopePrefixMatcher.IsPrefixMatch((IEnumerable<string>) parents, child), "Child '{0}' matches parents '{1}'", child, string.Join(", ", parents));
 
 
             // ScopePrefixMatcher.IsPrefixMatch(IReadOnlyList<string>, string)
