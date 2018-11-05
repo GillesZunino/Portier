@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Portier.Authorization.Tests.Common;
 
@@ -57,6 +58,33 @@ namespace Portier.Authorization.Tests
                 () => { ScopePrefixMatcher.IsPrefixMatch(new string[] { "/a", "b" }, "b"); },
                 (exception) => { return exception.GetType() == typeof(ArgumentOutOfRangeException); }
             );
+
+
+            // ScopePrefixMatcher.IsPrefixMatch(IReadOnlyList<string>, string)
+            AssertExtensions.ShouldThrow(
+                () => { ScopePrefixMatcher.IsPrefixMatch((IReadOnlyList<string>)null, null); },
+                (exception) => { return exception.GetType() == typeof(ArgumentNullException); }
+            );
+
+            AssertExtensions.ShouldThrow(
+                () => { ScopePrefixMatcher.IsPrefixMatch(new ReadOnlyCollection<string>(new string[] { }), null); },
+                (exception) => { return exception.GetType() == typeof(ArgumentOutOfRangeException); }
+            );
+
+            AssertExtensions.ShouldThrow(
+                () => { ScopePrefixMatcher.IsPrefixMatch(new ReadOnlyCollection<string>(new string[] { }), "/a"); },
+                (exception) => { return exception.GetType() == typeof(ArgumentOutOfRangeException); }
+            );
+
+            AssertExtensions.ShouldThrow(
+                () => { ScopePrefixMatcher.IsPrefixMatch(new ReadOnlyCollection<string>(new string[] { "/a", "b" }), "b"); },
+                (exception) => { return exception.GetType() == typeof(ArgumentOutOfRangeException); }
+            );
+
+            AssertExtensions.ShouldThrow(
+                () => { ScopePrefixMatcher.IsPrefixMatch(new ReadOnlyCollection<string>(new string[] { "/a", "b" }), "b"); },
+                (exception) => { return exception.GetType() == typeof(ArgumentOutOfRangeException); }
+            );
         }
 
         [TestMethod]
@@ -79,6 +107,16 @@ namespace Portier.Authorization.Tests
 
             child = "/Foo/Bar";
             Assert.IsTrue(ScopePrefixMatcher.IsPrefixMatch(parents, child), "Child '{0}' matches parents '{1}'", child, string.Join(", ", parents));
+
+
+            // ScopePrefixMatcher.IsPrefixMatch(IReadOnlyList<string>, string)
+            IReadOnlyList<string> parentsReadOnlyList = new ReadOnlyCollection<string>(new string[] { "/a", "/" });
+
+            child = "/Foo/Bar";
+            Assert.IsTrue(ScopePrefixMatcher.IsPrefixMatch(parentsReadOnlyList, child), "Child '{0}' matches parents '{1}'", child, string.Join(", ", parentsReadOnlyList));
+
+            child = "/Foo/Bar";
+            Assert.IsTrue(ScopePrefixMatcher.IsPrefixMatch(parentsReadOnlyList, child), "Child '{0}' matches parents '{1}'", child, string.Join(", ", parentsReadOnlyList));
         }
 
         [TestMethod]
@@ -121,6 +159,26 @@ namespace Portier.Authorization.Tests
 
             child = "/TTT/Bar/YYY";
             Assert.IsFalse(ScopePrefixMatcher.IsPrefixMatch(parents, child), "Child '{0}' matches parents '{1}'", child, string.Join(", ", parents));
+
+
+            // ScopePrefixMatcher.IsPrefixMatch(IReadOnlyList<string>, string)
+            IReadOnlyList<string> parentsReadOnlyList = new ReadOnlyCollection<string>(new string[] { "/Foo", "/Froggle/Bar" });
+
+            child = "/Foo";
+            Assert.IsTrue(ScopePrefixMatcher.IsPrefixMatch(parentsReadOnlyList, child), "Child '{0}' matches parents '{1}'", child, string.Join(", ", parentsReadOnlyList));
+
+            child = "/Foo/Bar/XX";
+            Assert.IsTrue(ScopePrefixMatcher.IsPrefixMatch(parentsReadOnlyList, child), "Child '{0}' matches parents '{1}'", child, string.Join(", ", parentsReadOnlyList));
+
+            child = "/Froggle/Bar/YYY";
+            Assert.IsTrue(ScopePrefixMatcher.IsPrefixMatch(parentsReadOnlyList, child), "Child '{0}' matches parents '{1}'", child, string.Join(", ", parentsReadOnlyList));
+
+            // No match
+            child = "/ZZZ";
+            Assert.IsFalse(ScopePrefixMatcher.IsPrefixMatch(parentsReadOnlyList, child), "Child '{0}' matches parents '{1}'", child, string.Join(", ", parentsReadOnlyList));
+
+            child = "/TTT/Bar/YYY";
+            Assert.IsFalse(ScopePrefixMatcher.IsPrefixMatch(parentsReadOnlyList, child), "Child '{0}' matches parents '{1}'", child, string.Join(", ", parentsReadOnlyList));
         }
 
         [TestMethod]
@@ -147,6 +205,19 @@ namespace Portier.Authorization.Tests
 
             child = "/frogGLE/bAr/YYY";
             Assert.IsTrue(ScopePrefixMatcher.IsPrefixMatch(parents, child), "Child '{0}' matches parents '{1}'", child, string.Join(", ", parents));
+
+
+            // ScopePrefixMatcher.IsPrefixMatch(IReadOnlyList<string>, string)
+            IReadOnlyList<string> parentsReadOnlyList = new ReadOnlyCollection<string>(new string[] { "/fOo", "/FroGglE/baR" });
+
+            child = "/FoO";
+            Assert.IsTrue(ScopePrefixMatcher.IsPrefixMatch(parentsReadOnlyList, child), "Child '{0}' matches parents '{1}'", child, string.Join(", ", parentsReadOnlyList));
+
+            child = "/FOO/BAr/xX";
+            Assert.IsTrue(ScopePrefixMatcher.IsPrefixMatch(parentsReadOnlyList, child), "Child '{0}' matches parents '{1}'", child, string.Join(", ", parentsReadOnlyList));
+
+            child = "/frogGLE/bAr/YYY";
+            Assert.IsTrue(ScopePrefixMatcher.IsPrefixMatch(parentsReadOnlyList, child), "Child '{0}' matches parents '{1}'", child, string.Join(", ", parentsReadOnlyList));
         }
 
         [TestMethod]
@@ -170,6 +241,16 @@ namespace Portier.Authorization.Tests
 
             child = "///frogGLE/bAr///YYY";
             Assert.IsTrue(ScopePrefixMatcher.IsPrefixMatch(parents, child), "Child '{0}' matches parents '{1}'", child, string.Join(", ", parents));
+
+
+            // ScopePrefixMatcher.IsPrefixMatch(IReadOnlyList<string>, string)
+            IReadOnlyList<string> parentsReadOnlyList = new ReadOnlyCollection<string>(new string[] { "/fOo///Bar", "/FroGglE/baR" });
+
+            child = "/FOO///BAr////////xX";
+            Assert.IsTrue(ScopePrefixMatcher.IsPrefixMatch(parentsReadOnlyList, child), "Child '{0}' matches parents '{1}'", child, string.Join(", ", parentsReadOnlyList));
+
+            child = "///frogGLE/bAr///YYY";
+            Assert.IsTrue(ScopePrefixMatcher.IsPrefixMatch(parentsReadOnlyList, child), "Child '{0}' matches parents '{1}'", child, string.Join(", ", parentsReadOnlyList));
         }
     }
 }

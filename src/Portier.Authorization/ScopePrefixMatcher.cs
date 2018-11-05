@@ -60,6 +60,33 @@ namespace Portier.Authorization
             return false;
         }
 
+        /// <summary>
+        /// Checks if the given child scope matches any of the parents.
+        /// </summary>
+        /// <param name="parents">One or more parent scopes.</param>
+        /// <param name="child">Child scope.</param>
+        /// <returns>true if the child scope matches at least one parent; otherwise, false.</returns>
+        /// <remarks>All scopes must start with a valid scope delimiter (aka be rooted) or <see cref="ArgumentOutOfRangeException"/> is thrown.</remarks>
+        public static bool IsPrefixMatch(IReadOnlyList<string> parents, string child)
+        {
+            Validators.ValidateScopes(parents);
+            Validators.ValidateScope(child);
+
+            string[] childComponents = GetScopeComponents(child);
+
+            // PERFORMANCE: We do not use LINQ (parents.Any(...)) as it allocates memory
+            // PERFORMANCE: We do not use foreach (string parent in parents) because it allocates memory
+            for (int index = 0; index < parents.Count; index++)
+            {
+                if (ScopeComponentsPrefixMatchChild(GetScopeComponents(parents[index]), childComponents))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         private static bool ScopeComponentsPrefixMatchChild(string[] scopeComponents, string[] childComponents)
         {
             // Convention: any empty scope (aka [] or "/" or "/////" matches any child

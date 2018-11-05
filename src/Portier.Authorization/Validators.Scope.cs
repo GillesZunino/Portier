@@ -67,5 +67,32 @@ namespace Portier.Authorization
                 throw new ArgumentOutOfRangeException(nameof(scopes), Resources.GetString("Validators_CollectionOfScopesMustContainOneEntry"));
             }
         }
+
+        /// <summary>
+        /// Validates a collection of scopes. Errors are reported via exceptions.
+        /// </summary>
+        /// <param name="scopes">One or more parent scopes.</param>
+        public static void ValidateScopes(IReadOnlyList<string> scopes)
+        {
+            if (scopes == null)
+            {
+                throw new ArgumentNullException(nameof(scopes), Resources.GetString("Validators_CollectionOfScopesCannotBeNull"));
+            }
+
+            bool hasParents = false;
+
+            // PERFORMANCE: We do not use LINQ (parents.Any(...)) as it allocates memory
+            // PERFORMANCE: We do not use foreach (string parent in parents) because it allocates memory
+            for (int index = 0; index < scopes.Count; index++)
+            {
+                Validators.ValidateScope(scopes[index]);
+                hasParents = true;
+            }
+
+            if (!hasParents)
+            {
+                throw new ArgumentOutOfRangeException(nameof(scopes), Resources.GetString("Validators_CollectionOfScopesMustContainOneEntry"));
+            }
+        }
     }
 }
