@@ -3,6 +3,7 @@
 // -----------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace Portier.Authorization
@@ -22,7 +23,7 @@ namespace Portier.Authorization
         /// <summary>
         /// Collection of valid permission delimiters.
         /// </summary>
-        public static readonly ReadOnlyCollection<char> PermissionDelimiters = new ReadOnlyCollection<char>(permissionDelimiters);
+        public static readonly IReadOnlyList<char> PermissionDelimiters = new ReadOnlyCollection<char>(permissionDelimiters);
 
         /// <summary>
         /// Determines wether an RBAC permission matches an RBAC pattern.
