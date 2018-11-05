@@ -64,7 +64,7 @@ namespace Portier.Authorization
                         {
                             patternSegmentIndex++;
 
-                            // We have encountered a wildcard - The next segment becomes a possible restart point in the pattern
+                            // We have encountered a wildcard - The next component becomes a possible restart point in the pattern
                             //
                             // Consider the following situation for which we would like the permission to match the pattern:
                             //
@@ -93,7 +93,7 @@ namespace Portier.Authorization
                                         patternSegmentIndex++;
                                     }
 
-                                    // Move to the next segment in the permission
+                                    // Move to the next component in the permission
                                     permissionSegmentIndex++;
                                 }
                                 else

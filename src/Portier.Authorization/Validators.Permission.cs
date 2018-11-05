@@ -31,7 +31,18 @@ namespace Portier.Authorization
             }
 
             // Permission must not start with one of the component delimiter we know
-            if (PermissionPatternMatcher.PermissionDelimiters.Any((c) => c == permission[0]))
+            // PERFORMANCE: We do not use LINQ or foreach here as they allocate memory
+            bool found = false;
+            for (int index = 0; index < PermissionPatternMatcher.PermissionDelimiters.Count; index++)
+            {
+                if (permission[0] == PermissionPatternMatcher.PermissionDelimiters[index])
+                {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (found)
             {
                 throw new ArgumentOutOfRangeException(nameof(permission), string.Format(CultureInfo.CurrentCulture, Resources.GetString("Validators_PermissionMustNotStartWithDelimiter"), permission, string.Join(", ", PermissionPatternMatcher.PermissionDelimiters)));
             }
@@ -49,7 +60,18 @@ namespace Portier.Authorization
             }
 
             // Pattern must not start with one of the component delimiter we know
-            if (PermissionPatternMatcher.PermissionDelimiters.Any((c) => c == pattern[0]))
+            // PERFORMANCE: We do not use LINQ or foreach here as they allocate memory
+            bool found = false;
+            for (int index = 0; index < PermissionPatternMatcher.PermissionDelimiters.Count; index++)
+            {
+                if (pattern[0] == PermissionPatternMatcher.PermissionDelimiters[index])
+                {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (found)
             {
                 throw new ArgumentOutOfRangeException(nameof(pattern), string.Format(CultureInfo.CurrentCulture, Resources.GetString("Validators_PermissionPatternMustNotStartWithDelimiter"), pattern, string.Join(", ", PermissionPatternMatcher.PermissionDelimiters)));
             }
